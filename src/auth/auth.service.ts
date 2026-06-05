@@ -11,6 +11,7 @@ import { RegisterDto } from './dtos/register.dto';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { LoginDto } from './dtos/login.dto';
 import { JwtService } from '@nestjs/jwt';
+import { UserResponseDto } from './dtos/users-response.dto';
 
 @Injectable()
 export class AuthService {
@@ -124,13 +125,18 @@ export class AuthService {
         name: true,
         lastName: true,
         email: true,
-        phone: true,
         role: true,
         organizationId: true,
+        organization: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
       },
     });
-
-    return users;
+    return users.map((user) => new UserResponseDto(user));
   }
 
   async login(data: LoginDto): Promise<{ access_token: string }> {

@@ -47,4 +47,10 @@ export class AuthController {
   getProfile(@CurrentUser() user: CurrentUserDto) {
     return new CurrentUserDto(user);
   }
+
+  @UseGuards(AuthGuard)
+  @Get('users')
+  getUsers(@CurrentUser() user: CurrentUserDto) {
+    return this.authService.getUsers(user.organizationId);
+  }
 }
