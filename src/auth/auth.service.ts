@@ -46,7 +46,7 @@ export class AuthService {
 
     const passwordHash = await bcrypt.hash(data.password, 10);
 
-    await this.prisma.$transaction(async (tx) => {
+    const user = await this.prisma.$transaction(async (tx) => {
       const organization = await tx.organization.create({
         data: {
           name: data.organizationName,
@@ -55,7 +55,7 @@ export class AuthService {
         },
       });
 
-      await tx.user.create({
+      const user = await tx.user.create({
         data: {
           name: data.name,
           lastName: data.lastName,
@@ -66,10 +66,21 @@ export class AuthService {
           organizationId: organization.id,
         },
       });
+
+      return user;
     });
 
+    const payload = {
+      sub: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      organizationId: user.organizationId,
+    };
+
     return {
-      message: 'User registered successfully',
+      access_token: await this.jwt.signAsync(payload),
+      user: new UserResponseDto(user),
     };
   }
 
@@ -106,15 +117,7 @@ export class AuthService {
       },
     });
 
-    return {
-      id: user.id,
-      name: user.name,
-      lastName: user.lastName,
-      email: user.email,
-      phone: user.phone,
-      role: user.role,
-      organizationId: user.organizationId,
-    };
+    return new UserResponseDto(user);
   }
 
   async getUsers(organizationId: string) {

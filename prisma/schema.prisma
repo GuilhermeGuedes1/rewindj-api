@@ -31,6 +31,8 @@ model Organization  {
 
   invites     Invite[]
   users       User[]
+  clients Client[]
+  events  Event[]
 
 }
 
@@ -49,7 +51,8 @@ model User {
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
 
-  createdInvites     Invite[]     
+  createdInvites Invite[]    
+  artistEvents   Event[]      @relation("ArtistEvents")
 }
 
 
@@ -79,3 +82,49 @@ enum InviteStatus {
   EXPIRED
   CANCELLED
 }
+
+model Event {
+  id String @id @default(uuid())
+
+  title     String
+  eventDate DateTime
+  startTime String?
+  endTime   String?
+
+  venueName String?
+  address   String?
+  city      String?
+  state     String?
+
+  fee   Decimal?
+  notes String?
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  clientId String?
+  client   Client? @relation(fields: [clientId], references: [id])
+
+  artistId String?
+  artist   User? @relation("ArtistEvents", fields: [artistId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Client {
+  id String @id @default(uuid())
+
+  name     String
+  phone    String?
+  email    String?
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  events Event[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
