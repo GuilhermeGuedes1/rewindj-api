@@ -146,7 +146,6 @@ export const ClientScalarFieldEnum = {
   name: 'name',
   phone: 'phone',
   email: 'email',
-  document: 'document',
   organizationId: 'organizationId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
