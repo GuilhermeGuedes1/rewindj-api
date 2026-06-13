@@ -28,7 +28,6 @@ export class EventsService {
         address: data.address,
         city: data.city,
         state: data.state,
-        fee: data.fee,
         notes: data.notes,
         artistId: data.artistId,
         clientId: client.id,

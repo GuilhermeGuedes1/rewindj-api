@@ -3,7 +3,6 @@ import {
   IsDateString,
   IsEmail,
   IsNotEmpty,
-  IsNumber,
   IsOptional,
   IsString,
   IsUUID,
@@ -72,13 +71,6 @@ export class CreateEventDto {
   @IsString()
   @IsNotEmpty()
   state!: string;
-
-  @ApiProperty({
-    example: 3500,
-    description: 'Artist fee',
-  })
-  @IsNumber()
-  fee!: number;
 
   @ApiProperty({
     example: 'Client requested open format set until midnight',
