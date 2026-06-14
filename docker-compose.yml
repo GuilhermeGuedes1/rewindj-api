@@ -6,8 +6,6 @@ services:
 
     build: .
 
-    command: yarn start:dev
-
     ports:
       - '3000:3000'
 
