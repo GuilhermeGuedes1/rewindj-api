@@ -7,6 +7,7 @@ import { InvitesModule } from './invites/invites.module';
 import { EventsModule } from './events/events.module';
 import { ClientsModule } from './clients/clients.module';
 import { AiModule } from './ai/ai.module';
+import { ArtistsModule } from './artists/artists.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { AiModule } from './ai/ai.module';
     EventsModule,
     ClientsModule,
     AiModule,
+    ArtistsModule,
   ],
   controllers: [],
   providers: [PrismaService],
