@@ -1,13 +1,40 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  BadRequestException,
+} from '@nestjs/common';
 import { Prisma } from '../generated/prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateEventDto } from './dtos/create-event.dto';
 import { CurrentUserDto } from 'src/auth/dtos/user.dto';
 import { EventResponseDto } from './event-response.dto';
+import { EventDetailsResponseDto } from './dtos/event-detail-response.dto';
 
 @Injectable()
 export class EventsService {
   constructor(private readonly prisma: PrismaService) {}
+
+  private parseRequiredDateOnly(value: string) {
+    const date = new Date(`${value}T00:00:00.000Z`);
+
+    if (Number.isNaN(date.getTime())) {
+      throw new BadRequestException(`Invalid date format: ${value}`);
+    }
+
+    return date;
+  }
+
+  private parseOptionalDateOnly(value?: string | null) {
+    if (!value) return undefined;
+
+    const date = new Date(`${value}T00:00:00.000Z`);
+
+    if (Number.isNaN(date.getTime())) {
+      throw new BadRequestException(`Invalid date format: ${value}`);
+    }
+
+    return date;
+  }
 
   async createEvent(data: CreateEventDto, user: CurrentUserDto) {
     try {
@@ -24,10 +51,8 @@ export class EventsService {
       const eventCreated = await this.prisma.event.create({
         data: {
           title: data.title,
-          eventDate: new Date(`${data.eventDate}T00:00:00.000Z`),
-          paymentDate: data.paymentDate
-            ? new Date(`${data.paymentDate}T00:00:00.000Z`)
-            : undefined,
+          eventDate: this.parseRequiredDateOnly(data.eventDate),
+          paymentDate: this.parseOptionalDateOnly(data.paymentDate),
           startTime: data.startTime,
           endTime: data.endTime,
           setDuration: data.setDuration,
@@ -95,5 +120,31 @@ export class EventsService {
     });
 
     return events.map((event) => new EventResponseDto(event));
+  }
+
+  async getEventById(id: string, user: CurrentUserDto) {
+    const event = await this.prisma.event.findFirst({
+      where: {
+        id,
+        organizationId: user.organizationId,
+      },
+      include: {
+        client: true,
+        artist: {
+          select: {
+            id: true,
+            fullName: true,
+            stageName: true,
+            email: true,
+          },
+        },
+      },
+    });
+
+    if (!event) {
+      throw new BadRequestException("Event doesn't exist");
+    }
+
+    return new EventDetailsResponseDto(event);
   }
 }
