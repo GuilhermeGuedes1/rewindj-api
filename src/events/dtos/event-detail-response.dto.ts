@@ -79,6 +79,18 @@ export class EventDetailsResponseDto {
   @ApiProperty({ type: EventArtistResponseDto })
   artist: EventArtistResponseDto;
 
+  @ApiProperty({ required: false, nullable: true })
+  setDuration: string | null;
+
+  @ApiProperty({ required: false, nullable: true })
+  paymentDate: Date | null;
+
+  @ApiProperty({ required: false, nullable: true })
+  paymentMethod: string | null;
+
+  @ApiProperty()
+  hasContract: boolean;
+
   constructor(event: any) {
     this.id = event.id;
     this.title = event.title;
@@ -90,6 +102,11 @@ export class EventDetailsResponseDto {
     this.city = event.city;
     this.state = event.state;
     this.notes = event.notes;
+
+    this.setDuration = event.setDuration;
+    this.paymentDate = event.paymentDate;
+    this.paymentMethod = event.paymentMethod;
+    this.hasContract = event.hasContract;
 
     this.client = new EventClientResponseDto(event.client);
     this.artist = new EventArtistResponseDto(event.artist);
