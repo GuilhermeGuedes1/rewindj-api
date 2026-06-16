@@ -122,6 +122,8 @@ model Artist {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  
 }
 
 model Client {
@@ -177,4 +179,6 @@ model Event {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([organizationId, artistId, eventDate, title])
 }

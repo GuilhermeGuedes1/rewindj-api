@@ -326,6 +326,7 @@ export type EventOrderByWithRelationInput = {
 
 export type EventWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  organizationId_artistId_eventDate_title?: Prisma.EventOrganizationIdArtistIdEventDateTitleCompoundUniqueInput
   AND?: Prisma.EventWhereInput | Prisma.EventWhereInput[]
   OR?: Prisma.EventWhereInput[]
   NOT?: Prisma.EventWhereInput | Prisma.EventWhereInput[]
@@ -350,7 +351,7 @@ export type EventWhereUniqueInput = Prisma.AtLeast<{
   artist?: Prisma.XOR<Prisma.ArtistNullableScalarRelationFilter, Prisma.ArtistWhereInput> | null
   client?: Prisma.XOR<Prisma.ClientNullableScalarRelationFilter, Prisma.ClientWhereInput> | null
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
-}, "id">
+}, "id" | "organizationId_artistId_eventDate_title">
 
 export type EventOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -561,6 +562,13 @@ export type EventListRelationFilter = {
 
 export type EventOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type EventOrganizationIdArtistIdEventDateTitleCompoundUniqueInput = {
+  organizationId: string
+  artistId: string
+  eventDate: Date | string
+  title: string
 }
 
 export type EventCountOrderByAggregateInput = {

@@ -12,33 +12,55 @@ export class AiService {
     const response = await this.ai.models.generateContent({
       model: process.env.GEMINI_MODEL || 'gemini-2.5-flash',
       contents: `
-Você é uma IA do sistema Orbit, um SaaS para DJs e agências.
+    Você é uma IA do sistema Orbit, um SaaS para DJs e agências.
 
-Extraia do texto abaixo os dados de um evento.
+    Extraia do texto abaixo os dados de um evento.
 
-Responda APENAS em JSON válido.
+    Extraia do texto abaixo os dados de um evento.
+
+    Regras:
+
+    - eventDate deve estar no formato YYYY-MM-DD.
+    - paymentDate deve estar no formato YYYY-MM-DD.
+    - paymentMethod deve ser um dos valores:
+      PIX,
+      CASH,
+      DEPOSIT,
+      FULL_ON_EVENT,
+      INVOICE,
+      INSTALLMENTS,
+      OTHER.
+    - hasContract deve ser true ou false.
+    - Quando uma informação não existir, retorne null.
+    - Responda APENAS JSON válido.
 
 
-Texto:
-${text}
 
-Formato esperado:
-{
-  "title": string | null,
-  "eventDate": string | null,
-  "startTime": string | null,
-  "endTime": string | null,
-  "venueName": string | null,
-  "address": string | null,
-  "city": string | null,
-  "state": string | null,
-  "fee": number | null,
-  "notes": string | null,
-  "artistName": string | null,
-  "clientName": string | null,
-  "clientPhone": string | null,
-  "clientEmail": string | null
-}
+
+    Texto:
+    ${text}
+
+    Formato esperado:
+      {
+        "title": string | null,
+        "eventDate": string | null,
+        "startTime": string | null,
+        "endTime": string | null,
+        "setDuration": string | null,
+        "venueName": string | null,
+        "address": string | null,
+        "city": string | null,
+        "state": string | null,
+        "paymentDate": string | null,
+        "paymentMethod": string | null,
+        "hasContract": boolean | null,
+        "notes": string | null,
+        "artistName": string | null,
+        "clientName": string | null,
+        "clientPhone": string | null,
+        "clientEmail": string | null,
+        "clientCompanyName": string | null
+    }
       `,
     });
 
