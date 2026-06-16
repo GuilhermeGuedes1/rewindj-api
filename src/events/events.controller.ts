@@ -1,4 +1,4 @@
-import { Controller, Post, UseGuards, Body, Get } from '@nestjs/common';
+import { Controller, Post, UseGuards, Body, Get, Param } from '@nestjs/common';
 import { EventsService } from './events.service';
 import { AuthGuard } from 'src/auth/auth.guards';
 import { CreateEventDto } from './dtos/create-event.dto';
@@ -64,5 +64,11 @@ export class EventsController {
   @Get()
   getEvents(@CurrentUser() user: CurrentUserDto) {
     return this.eventsService.getEvents(user);
+  }
+
+  @UseGuards(AuthGuard)
+  @Get(':id')
+  getEventById(@Param('id') id: string, @CurrentUser() user: CurrentUserDto) {
+    return this.eventsService.getEventById(id, user);
   }
 }
