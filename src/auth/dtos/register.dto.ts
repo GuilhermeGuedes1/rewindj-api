@@ -4,7 +4,7 @@ import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
 export class RegisterDto {
   @ApiProperty({
     example: 'Guilherme',
-    description: 'User first name',
+    description: 'First name of the owner user created with the organization.',
   })
   @IsString()
   @IsNotEmpty()
@@ -12,7 +12,7 @@ export class RegisterDto {
 
   @ApiProperty({
     example: 'Guedes',
-    description: 'User last name',
+    description: 'Last name of the owner user created with the organization.',
   })
   @IsString()
   @IsNotEmpty()
@@ -20,7 +20,7 @@ export class RegisterDto {
 
   @ApiProperty({
     example: 'guilherme@email.com',
-    description: 'User email',
+    description: 'Unique login email for the owner user.',
   })
   @IsEmail()
   @IsNotEmpty()
@@ -28,7 +28,7 @@ export class RegisterDto {
 
   @ApiProperty({
     example: '+5521999999999',
-    description: 'User phone number',
+    description: 'Unique phone number for the owner user.',
   })
   @IsString()
   @IsNotEmpty()
@@ -36,7 +36,7 @@ export class RegisterDto {
 
   @ApiProperty({
     example: '123456',
-    description: 'User password',
+    description: 'Password used to authenticate the owner user.',
     minLength: 6,
   })
   @IsString()
@@ -46,7 +46,7 @@ export class RegisterDto {
 
   @ApiProperty({
     example: 'Orbit Agency',
-    description: 'Organization name',
+    description: 'Name of the tenant organization, agency, or DJ business.',
   })
   @IsString()
   @IsNotEmpty()
@@ -54,7 +54,7 @@ export class RegisterDto {
 
   @ApiProperty({
     example: 'contato@orbitagency.com',
-    description: 'Organization email',
+    description: 'Unique contact email for the tenant organization.',
   })
   @IsEmail()
   @IsNotEmpty()
@@ -62,7 +62,8 @@ export class RegisterDto {
 
   @ApiProperty({
     example: '12.345.678/0001-90',
-    description: 'Organization document',
+    description:
+      'Unique business document for the tenant organization, such as CNPJ.',
   })
   @IsString()
   @IsNotEmpty()

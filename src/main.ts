@@ -13,9 +13,17 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Orbit API')
-    .setDescription('Api for agency, artists, invites, and events management')
+    .setDescription(
+      'Professional API for Orbit, a multi-tenant SaaS that helps DJs and agencies manage authentication, organization members, invites, artists, clients, events, and AI-assisted event drafts.',
+    )
     .setVersion('1.0')
-    .addBearerAuth()
+    .addBearerAuth({
+      type: 'http',
+      scheme: 'bearer',
+      bearerFormat: 'JWT',
+      description:
+        'Paste the JWT returned by Auth login or register to call protected endpoints.',
+    })
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
+import { Prisma } from '../generated/prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateEventDto } from './dtos/create-event.dto';
 import { CurrentUserDto } from 'src/auth/dtos/user.dto';
@@ -9,52 +10,67 @@ export class EventsService {
   constructor(private readonly prisma: PrismaService) {}
 
   async createEvent(data: CreateEventDto, user: CurrentUserDto) {
-    const client = await this.prisma.client.create({
-      data: {
-        name: data.clientName,
-        phone: data.clientPhone,
-        email: data.clientEmail,
-        companyName: data.clientCompanyName,
-        organizationId: user.organizationId,
-      },
-    });
+    try {
+      const client = await this.prisma.client.create({
+        data: {
+          name: data.clientName,
+          phone: data.clientPhone,
+          email: data.clientEmail,
+          companyName: data.clientCompanyName,
+          organizationId: user.organizationId,
+        },
+      });
 
-    const eventCreated = await this.prisma.event.create({
-      data: {
-        title: data.title,
-        eventDate: data.eventDate,
-        startTime: data.startTime,
-        endTime: data.endTime,
-        setDuration: data.setDuration,
-        venueName: data.venueName,
-        address: data.address,
-        city: data.city,
-        state: data.state,
-        paymentDate: data.paymentDate,
-        paymentMethod: data.paymentMethod,
-        hasContract: data.hasContract,
-        notes: data.notes,
-        artistId: data.artistId,
-        clientId: client.id,
-        organizationId: user.organizationId,
-      },
-      include: {
-        client: true,
-        artist: {
-          select: {
-            id: true,
-            fullName: true,
-            stageName: true,
-            email: true,
+      const eventCreated = await this.prisma.event.create({
+        data: {
+          title: data.title,
+          eventDate: new Date(`${data.eventDate}T00:00:00.000Z`),
+          paymentDate: data.paymentDate
+            ? new Date(`${data.paymentDate}T00:00:00.000Z`)
+            : undefined,
+          startTime: data.startTime,
+          endTime: data.endTime,
+          setDuration: data.setDuration,
+          venueName: data.venueName,
+          address: data.address,
+          city: data.city,
+          state: data.state,
+          paymentMethod: data.paymentMethod,
+          hasContract: data.hasContract,
+          notes: data.notes,
+          artistId: data.artistId,
+          clientId: client.id,
+          organizationId: user.organizationId,
+        },
+        include: {
+          client: true,
+          artist: {
+            select: {
+              id: true,
+              fullName: true,
+              stageName: true,
+              email: true,
+            },
           },
         },
-      },
-    });
+      });
 
-    return {
-      message: 'Event created successfully',
-      event: new EventResponseDto(eventCreated),
-    };
+      return {
+        message: 'Event created successfully',
+        event: new EventResponseDto(eventCreated),
+      };
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2002'
+      ) {
+        throw new ConflictException(
+          'An event with the same title, artist and date already exists.',
+        );
+      }
+
+      throw error;
+    }
   }
 
   async getEvents(user: CurrentUserDto) {
