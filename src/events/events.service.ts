@@ -38,15 +38,36 @@ export class EventsService {
 
   async createEvent(data: CreateEventDto, user: CurrentUserDto) {
     try {
-      const client = await this.prisma.client.create({
-        data: {
-          name: data.clientName,
-          phone: data.clientPhone,
-          email: data.clientEmail,
-          companyName: data.clientCompanyName,
-          organizationId: user.organizationId,
-        },
-      });
+      const clientWhereOr: Prisma.ClientWhereInput[] = [];
+
+      if (data.clientEmail) {
+        clientWhereOr.push({ email: data.clientEmail });
+      }
+
+      if (data.clientPhone) {
+        clientWhereOr.push({ phone: data.clientPhone });
+      }
+
+      let client = clientWhereOr.length
+        ? await this.prisma.client.findFirst({
+            where: {
+              organizationId: user.organizationId,
+              OR: clientWhereOr,
+            },
+          })
+        : null;
+
+      if (!client) {
+        client = await this.prisma.client.create({
+          data: {
+            name: data.clientName,
+            phone: data.clientPhone,
+            email: data.clientEmail,
+            companyName: data.clientCompanyName,
+            organizationId: user.organizationId,
+          },
+        });
+      }
 
       const eventCreated = await this.prisma.event.create({
         data: {

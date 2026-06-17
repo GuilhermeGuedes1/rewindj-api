@@ -102,13 +102,16 @@ export class InvitesService {
       throw new ConflictException('User already exists');
     }
 
+    const [name, ...lastNameParts] = data.fullName.trim().split(/\s+/);
+    const lastName = lastNameParts.join(' ') || name;
+
     const passwordHash = await bcrypt.hash(data.password, 10);
 
     await this.prisma.$transaction(async (tx) => {
       const createdUser = await tx.user.create({
         data: {
-          name: data.name,
-          lastName: data.lastName,
+          name,
+          lastName,
           email: invite.email,
           phone: data.phone,
           password: passwordHash,
@@ -120,10 +123,15 @@ export class InvitesService {
       if (invite.role === 'ARTIST') {
         await tx.artist.create({
           data: {
-            fullName: `${data.name} ${data.lastName}`,
-            stageName: data.stageName ?? `${data.name} ${data.lastName}`,
+            fullName: data.fullName,
+            stageName: data.stageName || data.fullName,
+            birthDate: data.birthDate ? new Date(data.birthDate) : null,
             phone: data.phone,
             email: invite.email,
+            address: data.address,
+            city: data.city,
+            state: data.state,
+            pixKey: data.pixKey,
             organizationId: invite.organizationId,
             userId: createdUser.id,
           },

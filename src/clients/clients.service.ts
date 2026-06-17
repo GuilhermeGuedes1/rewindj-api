@@ -2,6 +2,7 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { createClientDto } from './dtos/create-client.dto';
 import { CurrentUserDto } from 'src/auth/dtos/user.dto';
+import { ClientDetailsResponseDto } from './dtos/client-detail-response.dto';
 import { ClientResponseDto } from './dtos/client-response.dto';
 
 @Injectable()
@@ -31,12 +32,27 @@ export class ClientsService {
         id,
         organizationId: user.organizationId,
       },
+      include: {
+        events: {
+          include: {
+            artist: {
+              select: {
+                fullName: true,
+                stageName: true,
+              },
+            },
+          },
+          orderBy: {
+            eventDate: 'desc',
+          },
+        },
+      },
     });
 
     if (!client) {
       throw new BadRequestException('Client does not exist');
     }
 
-    return new ClientResponseDto(client);
+    return new ClientDetailsResponseDto(client);
   }
 }
