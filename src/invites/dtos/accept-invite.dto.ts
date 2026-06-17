@@ -1,20 +1,29 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsString, MinLength, IsOptional } from 'class-validator';
+import { IsDateString, IsOptional, IsString, MinLength } from 'class-validator';
 
 export class AcceptInviteDto {
   @ApiProperty({
-    example: 'John',
-    description: 'First name for the user account created from the invite.',
+    example: 'John Doe',
+    description: 'Full artist name.',
   })
   @IsString()
-  name!: string;
+  fullName!: string;
 
-  @ApiProperty({
-    example: 'Doe',
-    description: 'Last name for the user account created from the invite.',
+  @ApiPropertyOptional({
+    example: 'DJ Orbit',
+    description: 'Public artist stage name.',
   })
+  @IsOptional()
   @IsString()
-  lastName!: string;
+  stageName?: string;
+
+  @ApiPropertyOptional({
+    example: '1996-02-14',
+    description: 'Artist birth date.',
+  })
+  @IsOptional()
+  @IsDateString()
+  birthDate?: string;
 
   @ApiProperty({
     example: '+5521999999999',
@@ -22,6 +31,38 @@ export class AcceptInviteDto {
   })
   @IsString()
   phone!: string;
+
+  @ApiPropertyOptional({
+    example: 'Rua das Palmeiras, 123',
+    description: 'Artist address.',
+  })
+  @IsOptional()
+  @IsString()
+  address?: string;
+
+  @ApiPropertyOptional({
+    example: 'Rio de Janeiro',
+    description: 'Artist city.',
+  })
+  @IsOptional()
+  @IsString()
+  city?: string;
+
+  @ApiPropertyOptional({
+    example: 'RJ',
+    description: 'Artist state.',
+  })
+  @IsOptional()
+  @IsString()
+  state?: string;
+
+  @ApiPropertyOptional({
+    example: 'pix@email.com',
+    description: 'Artist Pix key.',
+  })
+  @IsOptional()
+  @IsString()
+  pixKey?: string;
 
   @ApiProperty({
     example: '123456',
@@ -31,13 +72,4 @@ export class AcceptInviteDto {
   @IsString()
   @MinLength(6)
   password!: string;
-
-  @ApiPropertyOptional({
-    example: 'DJ Orbit',
-    description:
-      'Public artist stage name. Used only when the invited role is ARTIST; defaults to full name when omitted.',
-  })
-  @IsString()
-  @IsOptional()
-  stageName?: string;
 }
