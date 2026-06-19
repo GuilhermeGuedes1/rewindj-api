@@ -26,7 +26,7 @@ export type AggregateArtist = {
 
 export type ArtistMinAggregateOutputType = {
   id: string | null
-  fullName: string | null
+  name: string | null
   stageName: string | null
   birthDate: Date | null
   phone: string | null
@@ -43,7 +43,7 @@ export type ArtistMinAggregateOutputType = {
 
 export type ArtistMaxAggregateOutputType = {
   id: string | null
-  fullName: string | null
+  name: string | null
   stageName: string | null
   birthDate: Date | null
   phone: string | null
@@ -60,7 +60,7 @@ export type ArtistMaxAggregateOutputType = {
 
 export type ArtistCountAggregateOutputType = {
   id: number
-  fullName: number
+  name: number
   stageName: number
   birthDate: number
   phone: number
@@ -79,7 +79,7 @@ export type ArtistCountAggregateOutputType = {
 
 export type ArtistMinAggregateInputType = {
   id?: true
-  fullName?: true
+  name?: true
   stageName?: true
   birthDate?: true
   phone?: true
@@ -96,7 +96,7 @@ export type ArtistMinAggregateInputType = {
 
 export type ArtistMaxAggregateInputType = {
   id?: true
-  fullName?: true
+  name?: true
   stageName?: true
   birthDate?: true
   phone?: true
@@ -113,7 +113,7 @@ export type ArtistMaxAggregateInputType = {
 
 export type ArtistCountAggregateInputType = {
   id?: true
-  fullName?: true
+  name?: true
   stageName?: true
   birthDate?: true
   phone?: true
@@ -203,7 +203,7 @@ export type ArtistGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 
 export type ArtistGroupByOutputType = {
   id: string
-  fullName: string
+  name: string
   stageName: string
   birthDate: Date | null
   phone: string | null
@@ -241,7 +241,7 @@ export type ArtistWhereInput = {
   OR?: Prisma.ArtistWhereInput[]
   NOT?: Prisma.ArtistWhereInput | Prisma.ArtistWhereInput[]
   id?: Prisma.StringFilter<"Artist"> | string
-  fullName?: Prisma.StringFilter<"Artist"> | string
+  name?: Prisma.StringFilter<"Artist"> | string
   stageName?: Prisma.StringFilter<"Artist"> | string
   birthDate?: Prisma.DateTimeNullableFilter<"Artist"> | Date | string | null
   phone?: Prisma.StringNullableFilter<"Artist"> | string | null
@@ -261,7 +261,7 @@ export type ArtistWhereInput = {
 
 export type ArtistOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  fullName?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   stageName?: Prisma.SortOrder
   birthDate?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -285,7 +285,7 @@ export type ArtistWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.ArtistWhereInput | Prisma.ArtistWhereInput[]
   OR?: Prisma.ArtistWhereInput[]
   NOT?: Prisma.ArtistWhereInput | Prisma.ArtistWhereInput[]
-  fullName?: Prisma.StringFilter<"Artist"> | string
+  name?: Prisma.StringFilter<"Artist"> | string
   stageName?: Prisma.StringFilter<"Artist"> | string
   birthDate?: Prisma.DateTimeNullableFilter<"Artist"> | Date | string | null
   phone?: Prisma.StringNullableFilter<"Artist"> | string | null
@@ -304,7 +304,7 @@ export type ArtistWhereUniqueInput = Prisma.AtLeast<{
 
 export type ArtistOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  fullName?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   stageName?: Prisma.SortOrder
   birthDate?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -327,7 +327,7 @@ export type ArtistScalarWhereWithAggregatesInput = {
   OR?: Prisma.ArtistScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ArtistScalarWhereWithAggregatesInput | Prisma.ArtistScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Artist"> | string
-  fullName?: Prisma.StringWithAggregatesFilter<"Artist"> | string
+  name?: Prisma.StringWithAggregatesFilter<"Artist"> | string
   stageName?: Prisma.StringWithAggregatesFilter<"Artist"> | string
   birthDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Artist"> | Date | string | null
   phone?: Prisma.StringNullableWithAggregatesFilter<"Artist"> | string | null
@@ -344,7 +344,7 @@ export type ArtistScalarWhereWithAggregatesInput = {
 
 export type ArtistCreateInput = {
   id?: string
-  fullName: string
+  name: string
   stageName: string
   birthDate?: Date | string | null
   phone?: string | null
@@ -362,7 +362,7 @@ export type ArtistCreateInput = {
 
 export type ArtistUncheckedCreateInput = {
   id?: string
-  fullName: string
+  name: string
   stageName: string
   birthDate?: Date | string | null
   phone?: string | null
@@ -380,7 +380,7 @@ export type ArtistUncheckedCreateInput = {
 
 export type ArtistUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   stageName?: Prisma.StringFieldUpdateOperationsInput | string
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -398,7 +398,7 @@ export type ArtistUpdateInput = {
 
 export type ArtistUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   stageName?: Prisma.StringFieldUpdateOperationsInput | string
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -416,7 +416,7 @@ export type ArtistUncheckedUpdateInput = {
 
 export type ArtistCreateManyInput = {
   id?: string
-  fullName: string
+  name: string
   stageName: string
   birthDate?: Date | string | null
   phone?: string | null
@@ -433,7 +433,7 @@ export type ArtistCreateManyInput = {
 
 export type ArtistUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   stageName?: Prisma.StringFieldUpdateOperationsInput | string
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -448,7 +448,7 @@ export type ArtistUpdateManyMutationInput = {
 
 export type ArtistUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   stageName?: Prisma.StringFieldUpdateOperationsInput | string
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -480,7 +480,7 @@ export type ArtistNullableScalarRelationFilter = {
 
 export type ArtistCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  fullName?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   stageName?: Prisma.SortOrder
   birthDate?: Prisma.SortOrder
   phone?: Prisma.SortOrder
@@ -497,7 +497,7 @@ export type ArtistCountOrderByAggregateInput = {
 
 export type ArtistMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  fullName?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   stageName?: Prisma.SortOrder
   birthDate?: Prisma.SortOrder
   phone?: Prisma.SortOrder
@@ -514,7 +514,7 @@ export type ArtistMaxOrderByAggregateInput = {
 
 export type ArtistMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  fullName?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   stageName?: Prisma.SortOrder
   birthDate?: Prisma.SortOrder
   phone?: Prisma.SortOrder
@@ -625,7 +625,7 @@ export type ArtistUpdateOneWithoutEventsNestedInput = {
 
 export type ArtistCreateWithoutOrganizationInput = {
   id?: string
-  fullName: string
+  name: string
   stageName: string
   birthDate?: Date | string | null
   phone?: string | null
@@ -642,7 +642,7 @@ export type ArtistCreateWithoutOrganizationInput = {
 
 export type ArtistUncheckedCreateWithoutOrganizationInput = {
   id?: string
-  fullName: string
+  name: string
   stageName: string
   birthDate?: Date | string | null
   phone?: string | null
@@ -688,7 +688,7 @@ export type ArtistScalarWhereInput = {
   OR?: Prisma.ArtistScalarWhereInput[]
   NOT?: Prisma.ArtistScalarWhereInput | Prisma.ArtistScalarWhereInput[]
   id?: Prisma.StringFilter<"Artist"> | string
-  fullName?: Prisma.StringFilter<"Artist"> | string
+  name?: Prisma.StringFilter<"Artist"> | string
   stageName?: Prisma.StringFilter<"Artist"> | string
   birthDate?: Prisma.DateTimeNullableFilter<"Artist"> | Date | string | null
   phone?: Prisma.StringNullableFilter<"Artist"> | string | null
@@ -705,7 +705,7 @@ export type ArtistScalarWhereInput = {
 
 export type ArtistCreateWithoutUserInput = {
   id?: string
-  fullName: string
+  name: string
   stageName: string
   birthDate?: Date | string | null
   phone?: string | null
@@ -722,7 +722,7 @@ export type ArtistCreateWithoutUserInput = {
 
 export type ArtistUncheckedCreateWithoutUserInput = {
   id?: string
-  fullName: string
+  name: string
   stageName: string
   birthDate?: Date | string | null
   phone?: string | null
@@ -755,7 +755,7 @@ export type ArtistUpdateToOneWithWhereWithoutUserInput = {
 
 export type ArtistUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   stageName?: Prisma.StringFieldUpdateOperationsInput | string
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -772,7 +772,7 @@ export type ArtistUpdateWithoutUserInput = {
 
 export type ArtistUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   stageName?: Prisma.StringFieldUpdateOperationsInput | string
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -789,7 +789,7 @@ export type ArtistUncheckedUpdateWithoutUserInput = {
 
 export type ArtistCreateWithoutEventsInput = {
   id?: string
-  fullName: string
+  name: string
   stageName: string
   birthDate?: Date | string | null
   phone?: string | null
@@ -806,7 +806,7 @@ export type ArtistCreateWithoutEventsInput = {
 
 export type ArtistUncheckedCreateWithoutEventsInput = {
   id?: string
-  fullName: string
+  name: string
   stageName: string
   birthDate?: Date | string | null
   phone?: string | null
@@ -839,7 +839,7 @@ export type ArtistUpdateToOneWithWhereWithoutEventsInput = {
 
 export type ArtistUpdateWithoutEventsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   stageName?: Prisma.StringFieldUpdateOperationsInput | string
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -856,7 +856,7 @@ export type ArtistUpdateWithoutEventsInput = {
 
 export type ArtistUncheckedUpdateWithoutEventsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   stageName?: Prisma.StringFieldUpdateOperationsInput | string
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -873,7 +873,7 @@ export type ArtistUncheckedUpdateWithoutEventsInput = {
 
 export type ArtistCreateManyOrganizationInput = {
   id?: string
-  fullName: string
+  name: string
   stageName: string
   birthDate?: Date | string | null
   phone?: string | null
@@ -889,7 +889,7 @@ export type ArtistCreateManyOrganizationInput = {
 
 export type ArtistUpdateWithoutOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   stageName?: Prisma.StringFieldUpdateOperationsInput | string
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -906,7 +906,7 @@ export type ArtistUpdateWithoutOrganizationInput = {
 
 export type ArtistUncheckedUpdateWithoutOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   stageName?: Prisma.StringFieldUpdateOperationsInput | string
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -923,7 +923,7 @@ export type ArtistUncheckedUpdateWithoutOrganizationInput = {
 
 export type ArtistUncheckedUpdateManyWithoutOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   stageName?: Prisma.StringFieldUpdateOperationsInput | string
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -970,7 +970,7 @@ export type ArtistCountOutputTypeCountEventsArgs<ExtArgs extends runtime.Types.E
 
 export type ArtistSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  fullName?: boolean
+  name?: boolean
   stageName?: boolean
   birthDate?: boolean
   phone?: boolean
@@ -991,7 +991,7 @@ export type ArtistSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
 
 export type ArtistSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  fullName?: boolean
+  name?: boolean
   stageName?: boolean
   birthDate?: boolean
   phone?: boolean
@@ -1010,7 +1010,7 @@ export type ArtistSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
 
 export type ArtistSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  fullName?: boolean
+  name?: boolean
   stageName?: boolean
   birthDate?: boolean
   phone?: boolean
@@ -1029,7 +1029,7 @@ export type ArtistSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
 
 export type ArtistSelectScalar = {
   id?: boolean
-  fullName?: boolean
+  name?: boolean
   stageName?: boolean
   birthDate?: boolean
   phone?: boolean
@@ -1044,7 +1044,7 @@ export type ArtistSelectScalar = {
   updatedAt?: boolean
 }
 
-export type ArtistOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "fullName" | "stageName" | "birthDate" | "phone" | "email" | "address" | "city" | "state" | "pixKey" | "userId" | "organizationId" | "createdAt" | "updatedAt", ExtArgs["result"]["artist"]>
+export type ArtistOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "stageName" | "birthDate" | "phone" | "email" | "address" | "city" | "state" | "pixKey" | "userId" | "organizationId" | "createdAt" | "updatedAt", ExtArgs["result"]["artist"]>
 export type ArtistInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.Artist$userArgs<ExtArgs>
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
@@ -1069,7 +1069,7 @@ export type $ArtistPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    fullName: string
+    name: string
     stageName: string
     birthDate: Date | null
     phone: string | null
@@ -1509,7 +1509,7 @@ export interface Prisma__ArtistClient<T, Null = never, ExtArgs extends runtime.T
  */
 export interface ArtistFieldRefs {
   readonly id: Prisma.FieldRef<"Artist", 'String'>
-  readonly fullName: Prisma.FieldRef<"Artist", 'String'>
+  readonly name: Prisma.FieldRef<"Artist", 'String'>
   readonly stageName: Prisma.FieldRef<"Artist", 'String'>
   readonly birthDate: Prisma.FieldRef<"Artist", 'DateTime'>
   readonly phone: Prisma.FieldRef<"Artist", 'String'>

@@ -7,7 +7,7 @@ export class AcceptInviteDto {
     description: 'Full artist name.',
   })
   @IsString()
-  fullName!: string;
+  name!: string;
 
   @ApiPropertyOptional({
     example: 'DJ Orbit',

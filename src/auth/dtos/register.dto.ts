@@ -11,14 +11,6 @@ export class RegisterDto {
   name!: string;
 
   @ApiProperty({
-    example: 'Guedes',
-    description: 'Last name of the owner user created with the organization.',
-  })
-  @IsString()
-  @IsNotEmpty()
-  lastName!: string;
-
-  @ApiProperty({
     example: 'guilherme@email.com',
     description: 'Unique login email for the owner user.',
   })

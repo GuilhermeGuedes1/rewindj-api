@@ -56,7 +56,6 @@ export class AuthService {
       const user = await tx.user.create({
         data: {
           name: data.name,
-          lastName: data.lastName,
           email: data.email,
           phone: data.phone,
           password: passwordHash,
@@ -88,7 +87,6 @@ export class AuthService {
       select: {
         id: true,
         name: true,
-        lastName: true,
         email: true,
         role: true,
         organizationId: true,
@@ -107,6 +105,13 @@ export class AuthService {
   async login(data: LoginDto): Promise<{ access_token: string }> {
     const user = await this.prisma.user.findUnique({
       where: { email: data.email },
+      include: {
+        organization: {
+          select: {
+            name: true,
+          },
+        },
+      },
     });
 
     if (!user) {
@@ -125,6 +130,7 @@ export class AuthService {
       email: user.email,
       role: user.role,
       organizationId: user.organizationId,
+      organizationName: user.organization.name,
     };
 
     return { access_token: await this.jwt.signAsync(payload) };

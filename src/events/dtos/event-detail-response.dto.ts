@@ -26,7 +26,7 @@ class EventArtistResponseDto {
   id: string;
 
   @ApiProperty()
-  fullName: string;
+  name: string;
 
   @ApiProperty()
   stageName: string | null;
@@ -36,7 +36,7 @@ class EventArtistResponseDto {
 
   constructor(artist: any) {
     this.id = artist.id;
-    this.fullName = artist.fullName;
+    this.name = artist.name;
     this.stageName = artist.stageName;
     this.email = artist.email;
   }

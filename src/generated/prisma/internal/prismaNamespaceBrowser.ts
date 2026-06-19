@@ -92,7 +92,6 @@ export const UserScalarFieldEnum = {
   email: 'email',
   password: 'password',
   name: 'name',
-  lastName: 'lastName',
   phone: 'phone',
   role: 'role',
   organizationId: 'organizationId',
@@ -122,7 +121,7 @@ export type InviteScalarFieldEnum = (typeof InviteScalarFieldEnum)[keyof typeof 
 
 export const ArtistScalarFieldEnum = {
   id: 'id',
-  fullName: 'fullName',
+  name: 'name',
   stageName: 'stageName',
   birthDate: 'birthDate',
   phone: 'phone',

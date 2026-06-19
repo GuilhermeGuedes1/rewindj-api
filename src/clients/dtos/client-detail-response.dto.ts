@@ -33,7 +33,7 @@ class ClientEventResponseDto {
     this.artistName =
       event.artist?.stageName && event.artist.stageName !== 'string'
         ? event.artist.stageName
-        : event.artist?.fullName;
+        : event.artist?.name;
   }
 }
 

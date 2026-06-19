@@ -12,7 +12,7 @@ export class ArtistResponseDto {
     example: 'Joao Pereira',
     description: 'Artist full legal or registration name.',
   })
-  fullName: string;
+  name: string;
 
   @ApiProperty({
     example: 'DJ Orbit',
@@ -83,7 +83,7 @@ export class ArtistResponseDto {
 
   constructor(artist: Artist) {
     this.id = artist.id;
-    this.fullName = artist.fullName;
+    this.name = artist.name;
     this.stageName = artist.stageName;
 
     this.birthDate = artist.birthDate;

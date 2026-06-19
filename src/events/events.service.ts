@@ -93,7 +93,7 @@ export class EventsService {
           artist: {
             select: {
               id: true,
-              fullName: true,
+              name: true,
               stageName: true,
               email: true,
             },
@@ -129,7 +129,7 @@ export class EventsService {
         artist: {
           select: {
             id: true,
-            fullName: true,
+            name: true,
             stageName: true,
             email: true,
           },
@@ -154,7 +154,7 @@ export class EventsService {
         artist: {
           select: {
             id: true,
-            fullName: true,
+            name: true,
             stageName: true,
             email: true,
           },
