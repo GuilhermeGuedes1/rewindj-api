@@ -27,7 +27,7 @@ type EventWithRelations = {
   } | null;
   artist: {
     id: string;
-    fullName: string;
+    name: string;
     stageName: string;
     email: string | null;
     phone: string | null;

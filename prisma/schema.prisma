@@ -55,8 +55,6 @@ model User {
   password String
 
   name     String
-  lastName String
-
   phone String @unique
 
   role Role
@@ -98,7 +96,7 @@ model Invite {
 model Artist {
   id String @id @default(uuid())
 
-  fullName  String
+  name  String
   stageName String
 
   birthDate DateTime?

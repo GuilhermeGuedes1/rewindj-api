@@ -8,8 +8,8 @@ export class CurrentUserDto {
   sub!: string;
 
   @ApiProperty({
-    example: 'Guilherme',
-    description: 'Authenticated user first name.',
+    example: 'Guilherme Guedes',
+    description: 'Authenticated user name.',
   })
   name!: string;
 
@@ -24,6 +24,12 @@ export class CurrentUserDto {
     description: 'Organization tenant identifier associated with the user.',
   })
   organizationId!: string;
+
+  @ApiProperty({
+    example: 'RewindJ Agency',
+    description: 'Organization name.',
+  })
+  organizationName!: string;
 
   constructor(data: CurrentUserDto) {
     Object.assign(this, data);

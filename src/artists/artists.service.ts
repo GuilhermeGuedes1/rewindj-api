@@ -64,7 +64,7 @@ export class ArtistsService {
         artist: {
           select: {
             id: true,
-            fullName: true,
+            name: true,
             stageName: true,
             email: true,
             phone: true,

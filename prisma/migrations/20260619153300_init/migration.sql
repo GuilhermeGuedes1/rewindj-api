@@ -25,9 +25,8 @@ CREATE TABLE "User" (
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "name" TEXT NOT NULL,
-    "lastName" TEXT NOT NULL,
     "phone" TEXT NOT NULL,
-    "role" "Role" NOT NULL DEFAULT 'ARTIST',
+    "role" "Role" NOT NULL,
     "organizationId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -55,7 +54,7 @@ CREATE TABLE "Invite" (
 -- CreateTable
 CREATE TABLE "Artist" (
     "id" TEXT NOT NULL,
-    "fullName" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
     "stageName" TEXT NOT NULL,
     "birthDate" TIMESTAMP(3),
     "phone" TEXT,
@@ -64,6 +63,7 @@ CREATE TABLE "Artist" (
     "city" TEXT,
     "state" TEXT,
     "pixKey" TEXT,
+    "userId" TEXT,
     "organizationId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -125,6 +125,12 @@ CREATE UNIQUE INDEX "User_phone_key" ON "User"("phone");
 -- CreateIndex
 CREATE UNIQUE INDEX "Invite_token_key" ON "Invite"("token");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "Artist_userId_key" ON "Artist"("userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Event_organizationId_artistId_eventDate_title_key" ON "Event"("organizationId", "artistId", "eventDate", "title");
+
 -- AddForeignKey
 ALTER TABLE "User" ADD CONSTRAINT "User_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -133,6 +139,9 @@ ALTER TABLE "Invite" ADD CONSTRAINT "Invite_organizationId_fkey" FOREIGN KEY ("o
 
 -- AddForeignKey
 ALTER TABLE "Invite" ADD CONSTRAINT "Invite_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Artist" ADD CONSTRAINT "Artist_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Artist" ADD CONSTRAINT "Artist_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -37,7 +37,7 @@ export class ClientsService {
           include: {
             artist: {
               select: {
-                fullName: true,
+                name: true,
                 stageName: true,
               },
             },

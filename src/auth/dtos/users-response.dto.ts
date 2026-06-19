@@ -35,12 +35,6 @@ export class UserResponseDto {
   name!: string;
 
   @ApiProperty({
-    example: 'Guedes',
-    description: 'User last name.',
-  })
-  lastName!: string;
-
-  @ApiProperty({
     example: 'guilherme@email.com',
     description: 'User email address.',
   })
@@ -68,7 +62,6 @@ export class UserResponseDto {
   constructor(data: Partial<UserResponseDto>) {
     this.id = data.id!;
     this.name = data.name!;
-    this.lastName = data.lastName!;
     this.email = data.email!;
     this.role = data.role!;
 

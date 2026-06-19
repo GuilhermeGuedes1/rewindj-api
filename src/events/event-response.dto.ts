@@ -39,7 +39,7 @@ class EventArtistResponseDto {
     example: 'Joao Pereira',
     description: 'Artist full legal or registration name.',
   })
-  fullName!: string;
+  name!: string;
 
   @ApiProperty({
     example: 'DJ Orbit',
@@ -146,7 +146,7 @@ export class EventResponseDto {
   })
   artist: {
     id: string;
-    fullName: string;
+    name: string;
     stageName: string;
     email: string;
   };
@@ -173,7 +173,7 @@ export class EventResponseDto {
 
     this.artist = {
       id: event.artist.id,
-      fullName: event.artist.fullName,
+      name: event.artist.name,
       stageName: event.artist.stageName,
       email: event.artist.email,
     };
