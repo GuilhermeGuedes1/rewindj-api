@@ -1,4 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { EventStatus } from '../generated/prisma/client';
 
 class EventClientResponseDto {
   @ApiProperty({
@@ -116,6 +117,14 @@ export class EventResponseDto {
   })
   state: string;
 
+  @ApiProperty({
+    enum: EventStatus,
+    enumName: 'EventStatus',
+    example: EventStatus.NEGOTIATING,
+    description: 'Current commercial status of the event.',
+  })
+  status: EventStatus;
+
   @ApiPropertyOptional({
     example: 3500,
     description: 'Commercial event fee when available.',
@@ -161,6 +170,7 @@ export class EventResponseDto {
     this.address = event.address;
     this.city = event.city;
     this.state = event.state;
+    this.status = event.status;
     this.fee = event.fee;
     this.notes = event.notes;
 

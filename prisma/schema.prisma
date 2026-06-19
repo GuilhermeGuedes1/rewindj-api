@@ -32,6 +32,12 @@ enum PaymentMethod {
   OTHER
 }
 
+enum EventStatus { 
+  NEGOTIATING
+  CONFIRMED
+  LOST
+}
+
 model Organization {
   id       String @id @default(uuid())
   name     String
@@ -158,6 +164,8 @@ model Event {
   address   String?
   city      String?
   state     String?
+
+  status EventStatus @default(NEGOTIATING)
 
   paymentDate   DateTime?
   paymentMethod PaymentMethod?

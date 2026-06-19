@@ -10,6 +10,12 @@ import {
 import { IsBoolean, IsEnum } from 'class-validator';
 import { PaymentMethod } from '../../generated/prisma/client';
 
+export enum EventStatusDto {
+  NEGOTIATING = 'NEGOTIATING',
+  CONFIRMED = 'CONFIRMED',
+  LOST = 'LOST',
+}
+
 export class CreateEventDto {
   @ApiProperty({
     example: 'Wedding at Copacabana Palace',
@@ -149,6 +155,16 @@ export class CreateEventDto {
   @IsBoolean()
   @IsOptional()
   hasContract?: boolean;
+
+  @ApiPropertyOptional({
+    enum: EventStatusDto,
+    enumName: 'EventStatus',
+    example: EventStatusDto.NEGOTIATING,
+    description: 'Current negotiation status of the event.',
+  })
+  @IsEnum(EventStatusDto)
+  @IsOptional()
+  status?: EventStatusDto;
 
   @ApiPropertyOptional({
     example: 'Empresa XYZ',

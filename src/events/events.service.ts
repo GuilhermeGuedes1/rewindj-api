@@ -9,6 +9,7 @@ import { CreateEventDto } from './dtos/create-event.dto';
 import { CurrentUserDto } from 'src/auth/dtos/user.dto';
 import { EventResponseDto } from './event-response.dto';
 import { EventDetailsResponseDto } from './dtos/event-detail-response.dto';
+import { EventStatus } from '../generated/prisma/client';
 
 @Injectable()
 export class EventsService {
@@ -81,6 +82,7 @@ export class EventsService {
           address: data.address,
           city: data.city,
           state: data.state,
+          status: data.status ?? EventStatus.NEGOTIATING,
           paymentMethod: data.paymentMethod,
           hasContract: data.hasContract,
           notes: data.notes,

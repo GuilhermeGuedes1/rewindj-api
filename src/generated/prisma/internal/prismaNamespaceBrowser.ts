@@ -164,6 +164,7 @@ export const EventScalarFieldEnum = {
   address: 'address',
   city: 'city',
   state: 'state',
+  status: 'status',
   paymentDate: 'paymentDate',
   paymentMethod: 'paymentMethod',
   hasContract: 'hasContract',

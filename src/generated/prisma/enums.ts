@@ -40,3 +40,12 @@ export const PaymentMethod = {
 } as const
 
 export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod]
+
+
+export const EventStatus = {
+  NEGOTIATING: 'NEGOTIATING',
+  CONFIRMED: 'CONFIRMED',
+  LOST: 'LOST'
+} as const
+
+export type EventStatus = (typeof EventStatus)[keyof typeof EventStatus]
