@@ -10,9 +10,6 @@ Rewindj is a multi-tenant SaaS platform designed to help agencies, managers and 
 
 ## Live Demo
 
-Frontend:
-https://app.rewindj.me
-
 Current Status:
 Private Beta
 
