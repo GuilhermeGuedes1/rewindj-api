@@ -1,4 +1,4 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guards';
 import { CurrentUserDto } from '../auth/dtos/user.dto';
 import { CurrentUser } from 'src/auth/decorators/user.decorator';
@@ -14,6 +14,7 @@ import {
 import { ArtistsService } from './artists.service';
 import { ArtistResponseDto } from './dtos/artist-response.dto';
 import { EventResponseDto } from './dtos/event-response.dto';
+import { UpdateArtistDto } from './dtos/update-artist-dto';
 
 @ApiTags('Artists')
 @ApiBearerAuth()
@@ -89,5 +90,14 @@ export class ArtistsController {
   @Get(':id')
   getArtistById(@Param('id') id: string, @CurrentUser() user: CurrentUserDto) {
     return this.artistsService.getArtistById(id, user);
+  }
+
+  @Patch(':id')
+  updateArtist(
+    @Param('id') id: string,
+    @Body() data: UpdateArtistDto,
+    @CurrentUser() user: CurrentUserDto,
+  ) {
+    return this.artistsService.updateArtist(id, data, user);
   }
 }

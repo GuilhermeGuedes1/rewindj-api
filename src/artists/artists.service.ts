@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CurrentUserDto } from '../auth/dtos/user.dto';
 import { ArtistResponseDto } from './dtos/artist-response.dto';
 import { EventResponseDto } from './dtos/event-response.dto';
+import { UpdateArtistDto } from './dtos/update-artist-dto';
 
 @Injectable()
 export class ArtistsService {
@@ -92,5 +93,38 @@ export class ArtistsService {
     }
 
     return new ArtistResponseDto(artist);
+  }
+
+  async updateArtist(id: string, data: UpdateArtistDto, user: CurrentUserDto) {
+    const artist = await this.prisma.artist.findFirst({
+      where: {
+        organizationId: user.organizationId,
+        id,
+      },
+    });
+
+    if (!artist) {
+      throw new NotFoundException('Artist profile not found');
+    }
+
+    const updatedArtist = await this.prisma.artist.update({
+      where: {
+        id,
+      },
+      data: {
+        name: data.name,
+        stageName: data.stageName,
+        phone: data.phone,
+        address: data.address,
+        city: data.city,
+        state: data.state,
+        pixKey: data.pixKey,
+      },
+    });
+
+    return {
+      message: 'Artist is succefully updated',
+      artist: new ArtistResponseDto(updatedArtist),
+    };
   }
 }

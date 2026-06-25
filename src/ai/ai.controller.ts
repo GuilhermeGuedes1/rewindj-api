@@ -36,6 +36,6 @@ export class AiController {
   @ApiUnauthorizedResponse({ description: 'Missing or invalid bearer token.' })
   @Post('event-draft')
   generateEventDraft(@Body() dto: GenerateEventDraftDto) {
-    return this.aiService.generateEventDraft(dto.text);
+    return this.aiService.generateEventDraft(dto.mode, dto.text);
   }
 }
