@@ -22,11 +22,24 @@ jobs:
           script: |
             set -e
             cd ${{ secrets.VPS_APP_PATH }}
+
             git pull origin main
-            sudo docker ps -aq --filter "name=orbit-api" | xargs -r sudo docker rm -f
+
+            echo "Cleaning Docker cache..."
+            sudo docker system prune -af || true
+            sudo docker builder prune -af || true
+
+            echo "Stopping old containers..."
+            sudo docker-compose down --remove-orphans
+
+            echo "Building API..."
+            sudo docker-compose build --no-cache api
+
             echo "Running Prisma migrations..."
             sudo docker-compose run --rm api yarn prisma migrate deploy
-            sudo docker-compose up -d --build
+
+            echo "Starting containers..."
+            sudo docker-compose up -d
 
             echo "Waiting for API to start..."
             sleep 15
