@@ -53,6 +53,7 @@ export class AuthService {
           name: data.organizationName,
           email: data.organizationEmail,
           document: data.organizationDocument,
+          accountType: 'AGENCY',
         },
       });
 
@@ -112,6 +113,7 @@ export class AuthService {
         organization: {
           select: {
             name: true,
+            accountType: true,
           },
         },
         artist: {
@@ -140,6 +142,7 @@ export class AuthService {
       organizationId: user.organizationId,
       organizationName: user.organization.name,
       artistId: user.artist?.id ?? null,
+      accountType: user.organization.accountType,
     };
 
     return { access_token: await this.jwt.signAsync(payload) };
@@ -154,6 +157,7 @@ export class AuthService {
         organization: {
           select: {
             name: true,
+            accountType: true,
           },
         },
         artist: {
@@ -176,6 +180,7 @@ export class AuthService {
       organizationId: user.organizationId,
       organizationName: user.organization.name,
       artistId: user.artist?.id ?? null,
+      accountType: user.organization.accountType,
     });
   }
 
@@ -212,6 +217,7 @@ export class AuthService {
         organization: {
           select: {
             name: true,
+            accountType: true,
           },
         },
         artist: {
@@ -234,6 +240,7 @@ export class AuthService {
       organizationId: user.organizationId,
       organizationName: user.organization.name,
       artistId: user.artist?.id ?? null,
+      accountType: user.organization.accountType,
     };
 
     const accessToken = await this.jwt.signAsync(payload);

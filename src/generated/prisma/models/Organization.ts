@@ -29,6 +29,7 @@ export type OrganizationMinAggregateOutputType = {
   name: string | null
   document: string | null
   email: string | null
+  accountType: $Enums.AccountType | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -38,6 +39,7 @@ export type OrganizationMaxAggregateOutputType = {
   name: string | null
   document: string | null
   email: string | null
+  accountType: $Enums.AccountType | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -47,6 +49,7 @@ export type OrganizationCountAggregateOutputType = {
   name: number
   document: number
   email: number
+  accountType: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -58,6 +61,7 @@ export type OrganizationMinAggregateInputType = {
   name?: true
   document?: true
   email?: true
+  accountType?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -67,6 +71,7 @@ export type OrganizationMaxAggregateInputType = {
   name?: true
   document?: true
   email?: true
+  accountType?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -76,6 +81,7 @@ export type OrganizationCountAggregateInputType = {
   name?: true
   document?: true
   email?: true
+  accountType?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -158,6 +164,7 @@ export type OrganizationGroupByOutputType = {
   name: string
   document: string
   email: string
+  accountType: $Enums.AccountType
   createdAt: Date
   updatedAt: Date
   _count: OrganizationCountAggregateOutputType | null
@@ -188,6 +195,7 @@ export type OrganizationWhereInput = {
   name?: Prisma.StringFilter<"Organization"> | string
   document?: Prisma.StringFilter<"Organization"> | string
   email?: Prisma.StringFilter<"Organization"> | string
+  accountType?: Prisma.EnumAccountTypeFilter<"Organization"> | $Enums.AccountType
   createdAt?: Prisma.DateTimeFilter<"Organization"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Organization"> | Date | string
   users?: Prisma.UserListRelationFilter
@@ -202,6 +210,7 @@ export type OrganizationOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   document?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  accountType?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   users?: Prisma.UserOrderByRelationAggregateInput
@@ -219,6 +228,7 @@ export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.OrganizationWhereInput[]
   NOT?: Prisma.OrganizationWhereInput | Prisma.OrganizationWhereInput[]
   name?: Prisma.StringFilter<"Organization"> | string
+  accountType?: Prisma.EnumAccountTypeFilter<"Organization"> | $Enums.AccountType
   createdAt?: Prisma.DateTimeFilter<"Organization"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Organization"> | Date | string
   users?: Prisma.UserListRelationFilter
@@ -233,6 +243,7 @@ export type OrganizationOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   document?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  accountType?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.OrganizationCountOrderByAggregateInput
@@ -248,6 +259,7 @@ export type OrganizationScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"Organization"> | string
   document?: Prisma.StringWithAggregatesFilter<"Organization"> | string
   email?: Prisma.StringWithAggregatesFilter<"Organization"> | string
+  accountType?: Prisma.EnumAccountTypeWithAggregatesFilter<"Organization"> | $Enums.AccountType
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Organization"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Organization"> | Date | string
 }
@@ -257,6 +269,7 @@ export type OrganizationCreateInput = {
   name: string
   document: string
   email: string
+  accountType?: $Enums.AccountType
   createdAt?: Date | string
   updatedAt?: Date | string
   users?: Prisma.UserCreateNestedManyWithoutOrganizationInput
@@ -271,6 +284,7 @@ export type OrganizationUncheckedCreateInput = {
   name: string
   document: string
   email: string
+  accountType?: $Enums.AccountType
   createdAt?: Date | string
   updatedAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutOrganizationInput
@@ -285,6 +299,7 @@ export type OrganizationUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   document?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  accountType?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUpdateManyWithoutOrganizationNestedInput
@@ -299,6 +314,7 @@ export type OrganizationUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   document?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  accountType?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -313,6 +329,7 @@ export type OrganizationCreateManyInput = {
   name: string
   document: string
   email: string
+  accountType?: $Enums.AccountType
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -322,6 +339,7 @@ export type OrganizationUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   document?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  accountType?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -331,6 +349,7 @@ export type OrganizationUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   document?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  accountType?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -340,6 +359,7 @@ export type OrganizationCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   document?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  accountType?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -349,6 +369,7 @@ export type OrganizationMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   document?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  accountType?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -358,6 +379,7 @@ export type OrganizationMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   document?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  accountType?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -369,6 +391,10 @@ export type OrganizationScalarRelationFilter = {
 
 export type StringFieldUpdateOperationsInput = {
   set?: string
+}
+
+export type EnumAccountTypeFieldUpdateOperationsInput = {
+  set?: $Enums.AccountType
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
@@ -450,6 +476,7 @@ export type OrganizationCreateWithoutUsersInput = {
   name: string
   document: string
   email: string
+  accountType?: $Enums.AccountType
   createdAt?: Date | string
   updatedAt?: Date | string
   invites?: Prisma.InviteCreateNestedManyWithoutOrganizationInput
@@ -463,6 +490,7 @@ export type OrganizationUncheckedCreateWithoutUsersInput = {
   name: string
   document: string
   email: string
+  accountType?: $Enums.AccountType
   createdAt?: Date | string
   updatedAt?: Date | string
   invites?: Prisma.InviteUncheckedCreateNestedManyWithoutOrganizationInput
@@ -492,6 +520,7 @@ export type OrganizationUpdateWithoutUsersInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   document?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  accountType?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   invites?: Prisma.InviteUpdateManyWithoutOrganizationNestedInput
@@ -505,6 +534,7 @@ export type OrganizationUncheckedUpdateWithoutUsersInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   document?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  accountType?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   invites?: Prisma.InviteUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -518,6 +548,7 @@ export type OrganizationCreateWithoutInvitesInput = {
   name: string
   document: string
   email: string
+  accountType?: $Enums.AccountType
   createdAt?: Date | string
   updatedAt?: Date | string
   users?: Prisma.UserCreateNestedManyWithoutOrganizationInput
@@ -531,6 +562,7 @@ export type OrganizationUncheckedCreateWithoutInvitesInput = {
   name: string
   document: string
   email: string
+  accountType?: $Enums.AccountType
   createdAt?: Date | string
   updatedAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutOrganizationInput
@@ -560,6 +592,7 @@ export type OrganizationUpdateWithoutInvitesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   document?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  accountType?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUpdateManyWithoutOrganizationNestedInput
@@ -573,6 +606,7 @@ export type OrganizationUncheckedUpdateWithoutInvitesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   document?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  accountType?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -586,6 +620,7 @@ export type OrganizationCreateWithoutArtistsInput = {
   name: string
   document: string
   email: string
+  accountType?: $Enums.AccountType
   createdAt?: Date | string
   updatedAt?: Date | string
   users?: Prisma.UserCreateNestedManyWithoutOrganizationInput
@@ -599,6 +634,7 @@ export type OrganizationUncheckedCreateWithoutArtistsInput = {
   name: string
   document: string
   email: string
+  accountType?: $Enums.AccountType
   createdAt?: Date | string
   updatedAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutOrganizationInput
@@ -628,6 +664,7 @@ export type OrganizationUpdateWithoutArtistsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   document?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  accountType?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUpdateManyWithoutOrganizationNestedInput
@@ -641,6 +678,7 @@ export type OrganizationUncheckedUpdateWithoutArtistsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   document?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  accountType?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -654,6 +692,7 @@ export type OrganizationCreateWithoutClientsInput = {
   name: string
   document: string
   email: string
+  accountType?: $Enums.AccountType
   createdAt?: Date | string
   updatedAt?: Date | string
   users?: Prisma.UserCreateNestedManyWithoutOrganizationInput
@@ -667,6 +706,7 @@ export type OrganizationUncheckedCreateWithoutClientsInput = {
   name: string
   document: string
   email: string
+  accountType?: $Enums.AccountType
   createdAt?: Date | string
   updatedAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutOrganizationInput
@@ -696,6 +736,7 @@ export type OrganizationUpdateWithoutClientsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   document?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  accountType?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUpdateManyWithoutOrganizationNestedInput
@@ -709,6 +750,7 @@ export type OrganizationUncheckedUpdateWithoutClientsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   document?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  accountType?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -722,6 +764,7 @@ export type OrganizationCreateWithoutEventsInput = {
   name: string
   document: string
   email: string
+  accountType?: $Enums.AccountType
   createdAt?: Date | string
   updatedAt?: Date | string
   users?: Prisma.UserCreateNestedManyWithoutOrganizationInput
@@ -735,6 +778,7 @@ export type OrganizationUncheckedCreateWithoutEventsInput = {
   name: string
   document: string
   email: string
+  accountType?: $Enums.AccountType
   createdAt?: Date | string
   updatedAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutOrganizationInput
@@ -764,6 +808,7 @@ export type OrganizationUpdateWithoutEventsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   document?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  accountType?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUpdateManyWithoutOrganizationNestedInput
@@ -777,6 +822,7 @@ export type OrganizationUncheckedUpdateWithoutEventsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   document?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  accountType?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -857,6 +903,7 @@ export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   name?: boolean
   document?: boolean
   email?: boolean
+  accountType?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   users?: boolean | Prisma.Organization$usersArgs<ExtArgs>
@@ -872,6 +919,7 @@ export type OrganizationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   name?: boolean
   document?: boolean
   email?: boolean
+  accountType?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["organization"]>
@@ -881,6 +929,7 @@ export type OrganizationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   name?: boolean
   document?: boolean
   email?: boolean
+  accountType?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["organization"]>
@@ -890,11 +939,12 @@ export type OrganizationSelectScalar = {
   name?: boolean
   document?: boolean
   email?: boolean
+  accountType?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type OrganizationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "document" | "email" | "createdAt" | "updatedAt", ExtArgs["result"]["organization"]>
+export type OrganizationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "document" | "email" | "accountType" | "createdAt" | "updatedAt", ExtArgs["result"]["organization"]>
 export type OrganizationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   users?: boolean | Prisma.Organization$usersArgs<ExtArgs>
   invites?: boolean | Prisma.Organization$invitesArgs<ExtArgs>
@@ -920,6 +970,7 @@ export type $OrganizationPayload<ExtArgs extends runtime.Types.Extensions.Intern
     name: string
     document: string
     email: string
+    accountType: $Enums.AccountType
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["organization"]>
@@ -1354,6 +1405,7 @@ export interface OrganizationFieldRefs {
   readonly name: Prisma.FieldRef<"Organization", 'String'>
   readonly document: Prisma.FieldRef<"Organization", 'String'>
   readonly email: Prisma.FieldRef<"Organization", 'String'>
+  readonly accountType: Prisma.FieldRef<"Organization", 'AccountType'>
   readonly createdAt: Prisma.FieldRef<"Organization", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Organization", 'DateTime'>
 }
