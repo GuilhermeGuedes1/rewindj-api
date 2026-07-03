@@ -80,6 +80,7 @@ export const OrganizationScalarFieldEnum = {
   name: 'name',
   document: 'document',
   email: 'email',
+  accountType: 'accountType',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

@@ -1,4 +1,4 @@
-import { Role } from 'src/generated/prisma/enums';
+import { AccountType, Role } from 'src/generated/prisma/client';
 
 export class CurrentUserDto {
   sub!: string;
@@ -8,4 +8,5 @@ export class CurrentUserDto {
   organizationId!: string;
   organizationName!: string;
   artistId?: string | null;
+  accountType!: AccountType;
 }

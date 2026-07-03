@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { Type, Transform } from 'class-transformer';
 import {
   IsDateString,
   IsEmail,
@@ -140,13 +140,13 @@ export class CreateEventDto {
   @IsOptional()
   fee?: number;
 
-  @ApiPropertyOptional({
-    example: '2026-12-10',
-    description:
-      'Expected or agreed payment date in ISO date format (YYYY-MM-DD).',
+  @Transform(({ value }: { value: unknown }) => {
+    if (value === '') return undefined;
+    if (typeof value === 'string') return value;
+    return undefined;
   })
-  @IsDateString()
   @IsOptional()
+  @IsDateString()
   paymentDate?: string;
 
   @ApiPropertyOptional({

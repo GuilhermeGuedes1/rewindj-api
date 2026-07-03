@@ -49,3 +49,11 @@ export const EventStatus = {
 } as const
 
 export type EventStatus = (typeof EventStatus)[keyof typeof EventStatus]
+
+
+export const AccountType = {
+  AGENCY: 'AGENCY',
+  INDEPENDENT_ARTIST: 'INDEPENDENT_ARTIST'
+} as const
+
+export type AccountType = (typeof AccountType)[keyof typeof AccountType]

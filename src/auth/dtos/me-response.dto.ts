@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Role } from 'src/generated/prisma/enums';
+import { AccountType, Role } from 'src/generated/prisma/enums';
 
 export class MeResponseDto {
   @ApiProperty()
@@ -22,6 +22,11 @@ export class MeResponseDto {
 
   @ApiProperty()
   organizationName!: string;
+
+  @ApiProperty({
+    enum: AccountType,
+  })
+  accountType!: AccountType;
 
   @ApiPropertyOptional()
   artistId?: string | null;

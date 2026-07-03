@@ -165,6 +165,7 @@ export class ArtistsService {
           name: body.stageName || body.name,
           email: body.email,
           document: `independent-dj-${randomUUID()}`,
+          accountType: 'INDEPENDENT_ARTIST',
         },
       });
 
@@ -174,7 +175,7 @@ export class ArtistsService {
           email: body.email,
           password: passwordHashed,
           phone: body.phone,
-          role: Role.CEO,
+          role: Role.ARTIST,
           organizationId: organization.id,
         },
       });

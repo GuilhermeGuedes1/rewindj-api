@@ -2,6 +2,7 @@ import {
   ConflictException,
   Injectable,
   BadRequestException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { Prisma } from '../generated/prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -9,8 +10,8 @@ import { CreateEventDto } from './dtos/create-event.dto';
 import { CurrentUserDto } from 'src/auth/dtos/user.dto';
 import { EventResponseDto } from './event-response.dto';
 import { EventDetailsResponseDto } from './dtos/event-detail-response.dto';
-import { EventStatus } from '../generated/prisma/client';
 import { UpdateEventDto } from './dtos/update-event.dto';
+import { AccountType, EventStatus, Role } from '../generated/prisma/client';
 
 @Injectable()
 export class EventsService {
@@ -39,6 +40,31 @@ export class EventsService {
   }
 
   async createEvent(data: CreateEventDto, user: CurrentUserDto) {
+    if (user.role === Role.ARTIST && user.accountType === AccountType.AGENCY) {
+      throw new ForbiddenException('Agency artists cannot create events');
+    }
+
+    const eventArtistId =
+      user.role === Role.ARTIST &&
+      user.accountType === AccountType.INDEPENDENT_ARTIST
+        ? user.artistId
+        : data.artistId;
+
+    if (!eventArtistId) {
+      throw new BadRequestException('Artist is required');
+    }
+
+    const artist = await this.prisma.artist.findFirst({
+      where: {
+        id: eventArtistId,
+        organizationId: user.organizationId,
+      },
+    });
+
+    if (!artist) {
+      throw new BadRequestException("Artist doesn't exist");
+    }
+
     try {
       let client;
 
@@ -107,7 +133,7 @@ export class EventsService {
           paymentMethod: data.paymentMethod,
           hasContract: data.hasContract,
           notes: data.notes,
-          artistId: data.artistId,
+          artistId: eventArtistId,
           clientId: client.id,
           organizationId: user.organizationId,
         },
@@ -141,12 +167,17 @@ export class EventsService {
       throw error;
     }
   }
-
   async getEvents(user: CurrentUserDto) {
+    const where: Prisma.EventWhereInput = {
+      organizationId: user.organizationId,
+    };
+
+    if (user.role === Role.ARTIST && user.accountType === AccountType.AGENCY) {
+      where.artistId = user.artistId;
+    }
+
     const events = await this.prisma.event.findMany({
-      where: {
-        organizationId: user.organizationId,
-      },
+      where,
       include: {
         client: true,
         artist: {
@@ -167,11 +198,17 @@ export class EventsService {
   }
 
   async getEventById(id: string, user: CurrentUserDto) {
+    const where: Prisma.EventWhereInput = {
+      id,
+      organizationId: user.organizationId,
+    };
+
+    if (user.role === Role.ARTIST && user.accountType === AccountType.AGENCY) {
+      where.artistId = user.artistId;
+    }
+
     const event = await this.prisma.event.findFirst({
-      where: {
-        id,
-        organizationId: user.organizationId,
-      },
+      where,
       include: {
         client: true,
         artist: {
@@ -193,6 +230,10 @@ export class EventsService {
   }
 
   async updateEvent(id: string, data: UpdateEventDto, user: CurrentUserDto) {
+    if (user.role === Role.ARTIST && user.accountType === AccountType.AGENCY) {
+      throw new ForbiddenException('Agency artists cannot update events');
+    }
+
     const event = await this.prisma.event.findFirst({
       where: {
         id,
@@ -203,7 +244,6 @@ export class EventsService {
     if (!event) {
       throw new BadRequestException("Event doesn't exist");
     }
-
     const {
       artistId,
       clientId,

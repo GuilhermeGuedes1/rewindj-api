@@ -38,11 +38,18 @@ enum EventStatus {
   LOST
 }
 
+enum AccountType {
+  AGENCY
+  INDEPENDENT_ARTIST
+}
+
 model Organization {
   id       String @id @default(uuid())
   name     String
   document String @unique
   email    String @unique
+
+  accountType AccountType @default(AGENCY)
 
   users   User[]
   invites Invite[]
