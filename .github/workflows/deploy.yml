@@ -25,15 +25,15 @@ jobs:
 
             git pull origin main
 
-            echo "Cleaning Docker cache..."
-            sudo docker system prune -af || true
-            sudo docker builder prune -af || true
-
             echo "Stopping old containers..."
             sudo docker-compose down --remove-orphans
 
+            echo "Cleaning Docker cache..."
+            sudo docker system prune -af --volumes || true
+            sudo docker builder prune -af || true
+
             echo "Building API..."
-            sudo docker-compose build --no-cache api
+            sudo docker-compose build api
 
             echo "Running Prisma migrations..."
             sudo docker-compose run --rm api yarn prisma migrate deploy
