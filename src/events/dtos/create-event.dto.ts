@@ -119,6 +119,11 @@ export class CreateEventDto {
     example: 'maria@email.com',
     description: 'Client email address for event coordination.',
   })
+  @Transform(({ value }: { value: unknown }) => {
+    if (value === '') return undefined;
+    if (typeof value === 'string') return value;
+    return undefined;
+  })
   @IsEmail()
   @IsOptional()
   clientEmail?: string;
