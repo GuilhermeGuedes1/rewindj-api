@@ -1,19 +1,20 @@
-# Rewindj
+# Rewindj API
 
-AI-Powered Operating System for DJs, Artists and Agencies.
+Backend API for Rewindj.
 
-🌐 Live Application: https://app.rewindj.me
+Rewindj is an AI-powered operating system for DJs, independent artists and agencies, designed to manage events, clients, artists and financial operations through a modern multi-tenant architecture.
 
-Rewindj is a multi-tenant SaaS platform designed to help agencies, managers and artists manage events, clients, negotiations and operations through a modern web platform powered by Artificial Intelligence.
+🌐 Live Application
+
+https://app.rewindj.me
 
 ---
 
-## Live Demo
+## Overview
 
-Current Status:
-Private Beta
+Rewindj API powers the entire platform, exposing REST endpoints consumed by the web application.
 
-The platform is currently being tested in a real-world event operation and is under active development.
+The backend is built with NestJS following a modular architecture, supporting multi-tenancy, role-based permissions and AI-assisted workflows.
 
 ---
 
@@ -22,17 +23,18 @@ The platform is currently being tested in a real-world event operation and is un
 ### Authentication & Security
 
 - JWT Authentication
-- Protected Routes
-- Role-Based Access Control
-- Multi-Tenant Architecture
-- Organization Data Isolation
+- Google OAuth
+- Protected Endpoints
+- Role-Based Access Control (RBAC)
+- Multi-Tenant Data Isolation
 
 ### Organization Management
 
 - Agency Registration
-- User Management
+- Independent Artist Registration
 - Invitation System
 - Artist Onboarding via Invite Flow
+- Account Type Support (Agency / Independent Artist)
 
 ### Artist Management
 
@@ -40,30 +42,43 @@ The platform is currently being tested in a real-world event operation and is un
 - Artist Profiles
 - Artist Details
 - Artist-to-User Association
+- Independent Artist Accounts
 
 ### Event Management
 
-- Create Events
-- Edit Events
+- Event Creation
+- Event Editing
 - Event Details
 - Event Listing
+- Automatic Client Creation
 - Artist Assignment
-- Negotiation Status Tracking
+- Negotiation Status
 - Fee Management
-- Multi-Tenant Event Isolation
+- Payment Date Tracking
+- Role-Based Event Permissions
 
 ### Client Management
 
 - Client Listing
 - Client Details
 - Company Information
-- Automatic Client Creation During Event Creation
+- Automatic Client Creation during Event Creation
+
+### Financial
+
+- Monthly Financial Summary
+- Monthly Revenue
+- Average Event Fee
+- Monthly Event Statistics
+- Month & Year Filtering
+- Artist Filtering
+- Permission-Aware Financial Reports
 
 ### Artificial Intelligence
 
 Powered by Google Gemini.
 
-The AI can extract information from WhatsApp messages, emails or free text and automatically generate structured event drafts.
+The AI extracts structured event information from WhatsApp messages, emails or free text.
 
 Supported extraction:
 
@@ -86,8 +101,8 @@ Supported extraction:
 ### Dashboard
 
 - Organization Overview
-- Upcoming Events
-- Artist-Specific Dashboard
+- Artist Dashboard
+- Independent Artist Dashboard
 - Operational Metrics
 
 ---
@@ -98,28 +113,38 @@ Supported extraction:
 
 - Manage Organization
 - Manage Users
-- Invite Team Members
+- Invite Artists
 - Manage Artists
 - Manage Clients
 - Manage Events
+- View Financial Reports
 
 ### ADMIN
 
 - Manage Artists
 - Manage Clients
 - Manage Events
+- View Financial Reports
 
 ### PRODUCER
 
-- Manage Events
 - Manage Artists
 - Manage Clients
+- Manage Events
+- View Financial Reports
 
-### ARTIST
+### ARTIST (Agency)
 
 - View Personal Dashboard
 - View Assigned Events
-- View Personal Information
+- View Personal Financial Summary
+
+### ARTIST (Independent)
+
+- Manage Own Events
+- Manage Own Clients
+- View Financial Dashboard
+- Operate as a single-person organization
 
 ---
 
@@ -133,15 +158,17 @@ Supported extraction:
 - PostgreSQL
 - JWT
 - Swagger
+- class-validator
+- class-transformer
 
 ### Frontend
 
 - Next.js 15
+- React 19
 - TypeScript
 - TailwindCSS
+- TanStack Query
 - shadcn/ui
-- React Hook Form
-- Axios
 
 ### AI
 
@@ -150,6 +177,7 @@ Supported extraction:
 ### Infrastructure
 
 - Docker
+- Neon PostgreSQL
 - DigitalOcean
 - Nginx
 - Vercel
@@ -159,16 +187,23 @@ Supported extraction:
 
 ## Architecture
 
-Rewindj follows a multi-tenant architecture.
+Rewindj follows a multi-tenant architecture where every organization owns its own resources.
 
-Each organization owns:
+Each organization manages:
 
 - Users
 - Artists
 - Clients
 - Events
 
-All data is isolated by organization.
+All operations are automatically isolated by organization.
+
+The platform also supports two business models:
+
+- Agency Accounts
+- Independent Artist Accounts
+
+Business rules are enforced through role-based permissions and account type awareness.
 
 ---
 
@@ -177,6 +212,7 @@ All data is isolated by organization.
 ### Completed
 
 - Authentication
+- Google OAuth
 - Organizations
 - Invitations
 - Artists
@@ -184,18 +220,19 @@ All data is isolated by organization.
 - Clients
 - Events
 - Event Editing
+- Financial Dashboard (Monthly Summary)
 - AI Event Parsing
-- Fee Tracking
-- Negotiation Status
 - Multi-Tenant Permissions
+- Role-Based Access Control
 
 ### In Progress
 
-- Contracts
-- Payment Management
+- Payment Status
 - Payment Scheduling
-- Financial Dashboard
-- Independent Artist Accounts
+- Annual Financial Reports
+- Monthly Revenue Charts
+- Contracts
+- Calendar Improvements
 
 ---
 
@@ -203,4 +240,4 @@ All data is isolated by organization.
 
 Rewindj aims to become the operating system for DJs, artists and agencies.
 
-The goal is to centralize event management, artist relationships, negotiations, payments and AI-powered workflows into a single platform.
+The platform centralizes event management, client relationships, financial operations and AI-powered workflows into a single modern ecosystem.
