@@ -23,6 +23,7 @@ jobs:
             set -e
             cd ${{ secrets.VPS_APP_PATH }}
 
+            echo "Pulling latest changes..."
             git pull origin main
 
             echo "Stopping old containers..."
@@ -44,6 +45,8 @@ jobs:
             echo "Waiting for API to start..."
             sleep 15
 
+            echo "Checking API health..."
             curl --fail http://localhost:3000/health
 
+            echo "Containers status..."
             sudo docker-compose ps
