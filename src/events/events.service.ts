@@ -3,6 +3,7 @@ import {
   Injectable,
   BadRequestException,
   ForbiddenException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { Prisma } from '../generated/prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -230,6 +231,10 @@ export class EventsService {
   }
 
   async updateEvent(id: string, data: UpdateEventDto, user: CurrentUserDto) {
+    if (!user) {
+      throw new UnauthorizedException('Authenticated user not found');
+    }
+
     if (user.role === Role.ARTIST && user.accountType === AccountType.AGENCY) {
       throw new ForbiddenException('Agency artists cannot update events');
     }
