@@ -18,35 +18,39 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
+          command_timeout: 20m
           script_stop: true
           script: |
             set -e
+
             cd ${{ secrets.VPS_APP_PATH }}
 
             echo "Pulling latest changes..."
             git pull origin main
 
-            echo "Stopping old containers..."
+            echo "Stopping old API container..."
             sudo docker-compose down --remove-orphans
-
-            echo "Cleaning Docker cache..."
-            sudo docker system prune -af --volumes || true
-            sudo docker builder prune -af || true
 
             echo "Building API..."
             sudo docker-compose build api
 
-            echo "Running Prisma migrations..."
+            echo "Running Prisma migrations on Neon..."
             sudo docker-compose run --rm api yarn prisma migrate deploy
 
-            echo "Starting containers..."
-            sudo docker-compose up -d
+            echo "Starting API..."
+            sudo docker-compose up -d api
 
-            echo "Waiting for API to start..."
-            sleep 15
+            echo "Waiting for API..."
+            sleep 10
 
             echo "Checking API health..."
-            curl --fail http://localhost:3000/health
+            curl --fail \
+              --retry 5 \
+              --retry-delay 5 \
+              http://localhost:3000/health
 
-            echo "Containers status..."
+            echo "Container status..."
             sudo docker-compose ps
+
+            echo "Removing dangling images..."
+            sudo docker image prune -f
