@@ -26,6 +26,7 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 
+@UseGuards(AuthGuard)
 @ApiBearerAuth()
 @ApiTags('Events')
 @Controller('events')
@@ -49,7 +50,6 @@ export class EventsController {
       'An event with the same title, artist, and date already exists.',
   })
   @ApiUnauthorizedResponse({ description: 'Missing or invalid bearer token.' })
-  @UseGuards(AuthGuard)
   @Post('create')
   createEvent(
     @Body() body: CreateEventDto,
@@ -69,13 +69,11 @@ export class EventsController {
     isArray: true,
   })
   @ApiUnauthorizedResponse({ description: 'Missing or invalid bearer token.' })
-  @UseGuards(AuthGuard)
   @Get()
   getEvents(@CurrentUser() user: CurrentUserDto) {
     return this.eventsService.getEvents(user);
   }
 
-  @UseGuards(AuthGuard)
   @Get(':id')
   getEventById(@Param('id') id: string, @CurrentUser() user: CurrentUserDto) {
     return this.eventsService.getEventById(id, user);
