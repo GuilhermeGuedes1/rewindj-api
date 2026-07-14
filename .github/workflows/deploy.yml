@@ -31,6 +31,18 @@ jobs:
             echo "Stopping old API container..."
             sudo docker-compose down --remove-orphans
 
+            echo "Checking disk usage..."
+            df -h
+            sudo docker system df
+
+            echo "Cleaning Docker build cache..."
+            sudo docker builder prune -af || true
+            sudo docker image prune -af || true
+            sudo docker container prune -f || true
+
+            echo "Disk usage after cleanup..."
+            df -h
+
             echo "Building API..."
             sudo docker-compose build api
 
