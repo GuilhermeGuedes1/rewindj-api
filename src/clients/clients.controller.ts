@@ -1,9 +1,10 @@
-import { Body, Controller, UseGuards, Get, Param } from '@nestjs/common';
+import { Body, Controller, UseGuards, Get, Param, Query } from '@nestjs/common';
 import { ClientsService } from './clients.service';
 import { AuthGuard } from 'src/auth/auth.guards';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from 'src/auth/decorators/user.decorator';
 import { CurrentUserDto } from 'src/auth/dtos/user.dto';
+import { PaginationDTO } from 'src/events/dtos/pagination-dto';
 
 @UseGuards(AuthGuard)
 @ApiTags('Clients')
@@ -13,8 +14,11 @@ export class ClientsController {
   constructor(private readonly clientsService: ClientsService) {}
 
   @Get()
-  getClients(@CurrentUser() user: CurrentUserDto) {
-    return this.clientsService.getClients(user);
+  getClients(
+    @Query() pagination: PaginationDTO,
+    @CurrentUser() user: CurrentUserDto,
+  ) {
+    return this.clientsService.getClients(user, pagination);
   }
 
   @Get(':id')

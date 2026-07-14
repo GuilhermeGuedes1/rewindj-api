@@ -6,6 +6,7 @@ import {
   Get,
   Param,
   Patch,
+  Query,
 } from '@nestjs/common';
 import { EventsService } from './events.service';
 import { AuthGuard } from 'src/auth/auth.guards';
@@ -25,6 +26,7 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+import { PaginationDTO } from './dtos/pagination-dto';
 
 @UseGuards(AuthGuard)
 @ApiBearerAuth()
@@ -70,8 +72,11 @@ export class EventsController {
   })
   @ApiUnauthorizedResponse({ description: 'Missing or invalid bearer token.' })
   @Get()
-  getEvents(@CurrentUser() user: CurrentUserDto) {
-    return this.eventsService.getEvents(user);
+  getEvents(
+    @Query() pagination: PaginationDTO,
+    @CurrentUser() user: CurrentUserDto,
+  ) {
+    return this.eventsService.getEvents(user, pagination);
   }
 
   @Get(':id')
