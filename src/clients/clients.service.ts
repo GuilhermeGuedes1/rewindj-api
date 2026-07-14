@@ -9,6 +9,7 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { AccountType, Role } from 'src/generated/prisma/client';
+import { PaginationDTO } from 'src/events/dtos/pagination-dto';
 
 @Injectable()
 export class ClientsService {
@@ -23,10 +24,28 @@ export class ClientsService {
     return { message: data };
   }
 
-  async getClients(user: CurrentUserDto) {
+  async getClients(user: CurrentUserDto, pagination: PaginationDTO) {
     this.ensureCanManageClients(user);
 
+    const { page = 1 } = pagination;
+    const limit = 10;
+    const skip = (page - 1) * limit;
+
+    const count = await this.prisma.client.count({
+      where: {
+        organizationId: user.organizationId,
+      },
+    });
+
+    if (skip >= count) {
+      throw new BadRequestException('Page number exceeds total pages');
+    }
+
+    const pageTotal = Math.ceil(count / limit);
+
     const clients = await this.prisma.client.findMany({
+      skip,
+      take: limit,
       where: {
         organizationId: user.organizationId,
       },
@@ -35,7 +54,14 @@ export class ClientsService {
       },
     });
 
-    return clients.map((client) => new ClientResponseDto(client));
+    return {
+      meta: {
+        total: count,
+        page,
+        pageTotal,
+      },
+      data: clients.map((client) => new ClientResponseDto(client)),
+    };
   }
 
   async getClientById(id: string, user: CurrentUserDto) {

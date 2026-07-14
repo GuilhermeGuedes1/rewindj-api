@@ -13,6 +13,7 @@ import { EventResponseDto } from './event-response.dto';
 import { EventDetailsResponseDto } from './dtos/event-detail-response.dto';
 import { UpdateEventDto } from './dtos/update-event.dto';
 import { AccountType, EventStatus, Role } from '../generated/prisma/client';
+import { PaginationDTO } from './dtos/pagination-dto';
 
 @Injectable()
 export class EventsService {
@@ -168,7 +169,8 @@ export class EventsService {
       throw error;
     }
   }
-  async getEvents(user: CurrentUserDto) {
+
+  async getEvents(user: CurrentUserDto, pagination: PaginationDTO) {
     const where: Prisma.EventWhereInput = {
       organizationId: user.organizationId,
     };
@@ -177,8 +179,18 @@ export class EventsService {
       where.artistId = user.artistId;
     }
 
+    const { page = 1 } = pagination;
+    const limit = 10;
+    const skip = (page - 1) * limit;
+
+    const count = await this.prisma.event.count({ where });
+
+    const pageTotal = Math.ceil(count / limit);
+
     const events = await this.prisma.event.findMany({
       where,
+      skip,
+      take: limit,
       include: {
         client: true,
         artist: {
@@ -195,7 +207,15 @@ export class EventsService {
       },
     });
 
-    return events.map((event) => new EventResponseDto(event));
+    return {
+      meta: {
+        page,
+        limit,
+        count,
+        pageTotal,
+      },
+      data: events.map((event) => new EventResponseDto(event)),
+    };
   }
 
   async getEventById(id: string, user: CurrentUserDto) {
