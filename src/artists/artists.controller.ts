@@ -87,13 +87,9 @@ export class ArtistsController {
     return this.artistsService.getMe(user);
   }
 
-    
   @UseGuards(AuthGuard)
   @Patch('me')
-  updateMe(
-  @Body() data: UpdateArtistDto,
-  @CurrentUser() user: CurrentUserDto,
-  ) {
+  updateMe(@Body() data: UpdateArtistDto, @CurrentUser() user: CurrentUserDto) {
     return this.artistsService.updateMe(data, user);
   }
 
@@ -133,5 +129,4 @@ export class ArtistsController {
   registerArtist(@Body() data: RegisterArtistDto) {
     return this.artistsService.registerArtist(data);
   }
-  
 }

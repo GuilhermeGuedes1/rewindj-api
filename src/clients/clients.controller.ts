@@ -1,4 +1,4 @@
-import { Body, Controller, UseGuards, Get, Param, Query } from '@nestjs/common';
+import { Controller, UseGuards, Get, Param, Query } from '@nestjs/common';
 import { ClientsService } from './clients.service';
 import { AuthGuard } from 'src/auth/auth.guards';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
