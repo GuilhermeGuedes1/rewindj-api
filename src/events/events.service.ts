@@ -41,6 +41,20 @@ export class EventsService {
     return date;
   }
 
+  private buildEventWhere(user: CurrentUserDto): Prisma.EventWhereInput {
+    const where: Prisma.EventWhereInput = {};
+
+    if (user.accountType === AccountType.AGENCY) {
+      where.organizationId = user.organizationId;
+    }
+
+    if (user.accountType === AccountType.INDEPENDENT_ARTIST) {
+      where.artistId = user.artistId;
+    }
+
+    return where;
+  }
+
   async createEvent(data: CreateEventDto, user: CurrentUserDto) {
     if (user.role === Role.ARTIST && user.accountType === AccountType.AGENCY) {
       throw new ForbiddenException('Agency artists cannot create events');
@@ -171,13 +185,7 @@ export class EventsService {
   }
 
   async getEvents(user: CurrentUserDto, pagination: PaginationDTO) {
-    const where: Prisma.EventWhereInput = {
-      organizationId: user.organizationId,
-    };
-
-    if (user.role === Role.ARTIST && user.accountType === AccountType.AGENCY) {
-      where.artistId = user.artistId;
-    }
+    const where = this.buildEventWhere(user);
 
     const { page = 1 } = pagination;
     const limit = 10;
@@ -334,6 +342,57 @@ export class EventsService {
     return {
       message: 'Event updated successfully',
       event: new EventResponseDto(updatedEvent),
+    };
+  }
+
+  async getDashboardSummary(user: CurrentUserDto) {
+    const where = this.buildEventWhere(user);
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const [confirmedEvents, negotiatingEvents, nextEvent] = await Promise.all([
+      this.prisma.event.count({
+        where: {
+          ...where,
+          status: 'CONFIRMED',
+        },
+      }),
+
+      this.prisma.event.count({
+        where: {
+          ...where,
+          status: 'NEGOTIATING',
+        },
+      }),
+
+      this.prisma.event.findFirst({
+        where: {
+          ...where,
+          status: 'CONFIRMED',
+          eventDate: {
+            gte: today,
+          },
+        },
+        orderBy: {
+          eventDate: 'asc',
+        },
+        include: {
+          client: true,
+          artist: {
+            select: {
+              id: true,
+              name: true,
+              stageName: true,
+            },
+          },
+        },
+      }),
+    ]);
+    return {
+      confirmedEvents,
+      negotiatingEvents,
+      nextEvent,
     };
   }
 }

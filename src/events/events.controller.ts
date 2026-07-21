@@ -79,6 +79,11 @@ export class EventsController {
     return this.eventsService.getEvents(user, pagination);
   }
 
+  @Get('dashboard-summary')
+  getDashboardSummary(@CurrentUser() user: CurrentUserDto) {
+    return this.eventsService.getDashboardSummary(user);
+  }
+
   @Get(':id')
   getEventById(@Param('id') id: string, @CurrentUser() user: CurrentUserDto) {
     return this.eventsService.getEventById(id, user);
