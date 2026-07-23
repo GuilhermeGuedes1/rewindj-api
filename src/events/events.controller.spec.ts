@@ -12,6 +12,7 @@ describe('EventsController', () => {
 
   const mockEventsService = {
     getEvents: jest.fn(),
+    getDashboardSummary: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -121,6 +122,73 @@ describe('EventsController', () => {
         user,
         pagination,
       );
+    });
+  });
+
+  describe('dashboard Summary', () => {
+    it('Should return a summary about events', async () => {
+      const result = {
+        confirmedEvents: 1,
+        negotiatingEvents: 2,
+        nextEvent: {
+          id: 'event-1',
+          title: 'Casamento',
+          eventDate: new Date(),
+          startTime: null,
+          endTime: null,
+          setDuration: null,
+          venueName: null,
+          address: null,
+          city: null,
+          state: null,
+          status: EventStatus.CONFIRMED,
+          fee: null,
+          paymentDate: null,
+          paymentMethod: null,
+          hasContract: false,
+          notes: null,
+          artistId: 'artist-1',
+          clientId: 'client-1',
+          organizationId: 'organization-1',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          client: {
+            id: 'client-1',
+            name: 'João',
+            companyName: null,
+            phone: null,
+            email: null,
+            organizationId: 'organization-1',
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
+          artist: {
+            id: 'artist-1',
+            name: 'Guilherme',
+            stageName: 'DJ Gui',
+          },
+        },
+      };
+
+      const user = {
+        sub: '1',
+        name: 'Guilherme',
+        email: 'guilherme@email.com',
+        role: Role.CEO,
+        organizationId: '1',
+        organizationName: 'Oganization1',
+        artistId: '1',
+        accountType: AccountType.INDEPENDENT_ARTIST,
+      };
+
+      jest
+        .spyOn(eventsService, 'getDashboardSummary')
+        .mockResolvedValue(result);
+
+      const response = await eventsController.getDashboardSummary(user);
+
+      expect(response).toEqual(result);
+      expect(mockEventsService.getDashboardSummary).toHaveBeenCalledWith(user);
     });
   });
 });
