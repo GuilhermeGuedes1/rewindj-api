@@ -11,6 +11,7 @@ describe('ArtistController', () => {
 
   const mockArtistService = {
     findAll: jest.fn(),
+    getArtistById: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -85,6 +86,45 @@ describe('ArtistController', () => {
       expect(response).toEqual(result);
 
       expect(mockArtistService.findAll).toHaveBeenCalledWith(user);
+    });
+  });
+
+  describe('getArtistById', () => {
+    it('Should return artist data by id', async () => {
+      const result = {
+        id: '2',
+        name: 'Cristian',
+        stageName: 'Dj Roc',
+        birthDate: new Date(),
+        phone: '21 99999-2222',
+        email: 'roc@gmail.com',
+        address: 'Rua do rio',
+        city: 'Rio de janeiro',
+        state: 'RJ',
+        pixKey: '',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+
+      const id = '1';
+
+      const user = {
+        sub: 'user-1',
+        name: 'Guilherme',
+        email: 'gui@email.com',
+        role: Role.CEO,
+        organizationId: 'org-1',
+        organizationName: 'Organization 1',
+        artistId: null,
+        accountType: AccountType.AGENCY,
+      };
+
+      jest.spyOn(artistService, 'getArtistById').mockResolvedValue(result);
+
+      const response = await artistController.getArtistById(id, user);
+
+      expect(response).toEqual(result);
+      expect(mockArtistService.getArtistById).toHaveBeenCalledWith(id, user);
     });
   });
 });
