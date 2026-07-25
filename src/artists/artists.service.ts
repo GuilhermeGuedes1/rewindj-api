@@ -12,6 +12,7 @@ import { RegisterArtistDto } from './dtos/register-artist.dto';
 import * as bcrypt from 'bcrypt';
 import { Role } from 'src/generated/prisma/enums';
 import { randomUUID } from 'crypto';
+import { ensureCanManageOrganization } from 'src/auth/organization-authorization';
 
 @Injectable()
 export class ArtistsService {
@@ -32,6 +33,8 @@ export class ArtistsService {
   }
 
   async findAll(user: CurrentUserDto) {
+    ensureCanManageOrganization(user);
+
     const artists = await this.prisma.artist.findMany({
       where: {
         organizationId: user.organizationId,
@@ -89,6 +92,8 @@ export class ArtistsService {
   }
 
   async getArtistById(id: string, user: CurrentUserDto) {
+    ensureCanManageOrganization(user);
+
     const artist = await this.prisma.artist.findFirst({
       where: {
         organizationId: user.organizationId,
@@ -104,6 +109,8 @@ export class ArtistsService {
   }
 
   async updateArtist(id: string, data: UpdateArtistDto, user: CurrentUserDto) {
+    ensureCanManageOrganization(user);
+
     const artist = await this.prisma.artist.findFirst({
       where: {
         organizationId: user.organizationId,

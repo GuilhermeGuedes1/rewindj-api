@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { AccountType, Role } from 'src/generated/prisma/client';
 import { PaginationDTO } from 'src/events/dtos/pagination-dto';
+import { buildEventAuthorizationWhere } from 'src/auth/event-authorization';
 
 @Injectable()
 export class ClientsService {
@@ -74,6 +75,7 @@ export class ClientsService {
       },
       include: {
         events: {
+          where: buildEventAuthorizationWhere(user),
           include: {
             artist: {
               select: {

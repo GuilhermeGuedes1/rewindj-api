@@ -14,6 +14,7 @@ import { EventDetailsResponseDto } from './dtos/event-detail-response.dto';
 import { UpdateEventDto } from './dtos/update-event.dto';
 import { AccountType, EventStatus, Role } from '../generated/prisma/client';
 import { PaginationDTO } from './dtos/pagination-dto';
+import { buildEventAuthorizationWhere } from 'src/auth/event-authorization';
 
 @Injectable()
 export class EventsService {
@@ -42,17 +43,7 @@ export class EventsService {
   }
 
   private buildEventWhere(user: CurrentUserDto): Prisma.EventWhereInput {
-    const where: Prisma.EventWhereInput = {};
-
-    if (user.accountType === AccountType.AGENCY) {
-      where.organizationId = user.organizationId;
-    }
-
-    if (user.accountType === AccountType.INDEPENDENT_ARTIST) {
-      where.artistId = user.artistId;
-    }
-
-    return where;
+    return buildEventAuthorizationWhere(user);
   }
 
   async createEvent(data: CreateEventDto, user: CurrentUserDto) {
@@ -229,12 +220,8 @@ export class EventsService {
   async getEventById(id: string, user: CurrentUserDto) {
     const where: Prisma.EventWhereInput = {
       id,
-      organizationId: user.organizationId,
+      ...this.buildEventWhere(user),
     };
-
-    if (user.role === Role.ARTIST && user.accountType === AccountType.AGENCY) {
-      where.artistId = user.artistId;
-    }
 
     const event = await this.prisma.event.findFirst({
       where,
@@ -270,7 +257,7 @@ export class EventsService {
     const event = await this.prisma.event.findFirst({
       where: {
         id,
-        organizationId: user.organizationId,
+        ...this.buildEventWhere(user),
       },
     });
 
@@ -288,6 +275,19 @@ export class EventsService {
     } = data;
 
     void clientId;
+
+    if (artistId) {
+      const artist = await this.prisma.artist.findFirst({
+        where: {
+          id: artistId,
+          organizationId: user.organizationId,
+        },
+      });
+
+      if (!artist) {
+        throw new BadRequestException("Artist doesn't exist");
+      }
+    }
 
     if (event.clientId) {
       await this.prisma.client.update({
