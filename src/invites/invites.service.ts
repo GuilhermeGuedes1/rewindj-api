@@ -11,12 +11,15 @@ import {
 import { InviteStatus } from '../generated/prisma/client';
 import { AcceptInviteDto } from './dtos/accept-invite.dto';
 import * as bcrypt from 'bcrypt';
+import { ensureCanManageOrganization } from 'src/auth/organization-authorization';
 
 @Injectable()
 export class InvitesService {
   constructor(private readonly prisma: PrismaService) {}
 
   async createInvite(user: CurrentUserDto, data: CreateInviteDto) {
+    ensureCanManageOrganization(user);
+
     const token = randomUUID();
 
     const expiresAt = new Date();

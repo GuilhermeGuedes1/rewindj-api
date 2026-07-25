@@ -13,6 +13,7 @@ import { UserResponseDto } from './dtos/users-response.dto';
 import { CurrentUserDto } from './dtos/user.dto';
 import { UpdateMeDto } from './dtos/update-me.dto';
 import { MeResponseDto } from './dtos/me-response.dto';
+import { ensureCanManageOrganization } from './organization-authorization';
 
 @Injectable()
 export class AuthService {
@@ -47,7 +48,7 @@ export class AuthService {
 
     const passwordHash = await bcrypt.hash(data.password, 10);
 
-    const user = await this.prisma.$transaction(async (tx) => {
+    const result = await this.prisma.$transaction(async (tx) => {
       const organization = await tx.organization.create({
         data: {
           name: data.organizationName,
@@ -68,26 +69,27 @@ export class AuthService {
         },
       });
 
-      return user;
+      return { user, organization };
     });
 
-    const payload = {
-      sub: user.id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      organizationId: user.organizationId,
-    };
+    const payload = this.buildJwtPayload({
+      user: result.user,
+      organizationName: result.organization.name,
+      accountType: result.organization.accountType,
+      artistId: null,
+    });
 
     return {
       access_token: await this.jwt.signAsync(payload),
-      user: new UserResponseDto(user),
+      user: new UserResponseDto(result.user),
     };
   }
 
-  async getUsers(organizationId: string) {
+  async getUsers(user: CurrentUserDto) {
+    ensureCanManageOrganization(user);
+
     const users = await this.prisma.user.findMany({
-      where: { organizationId },
+      where: { organizationId: user.organizationId },
       select: {
         id: true,
         name: true,
@@ -134,16 +136,12 @@ export class AuthService {
       throw new UnauthorizedException('User or email invalids');
     }
 
-    const payload = {
-      sub: user.id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      organizationId: user.organizationId,
+    const payload = this.buildJwtPayload({
+      user,
       organizationName: user.organization.name,
-      artistId: user.artist?.id ?? null,
       accountType: user.organization.accountType,
-    };
+      artistId: user.artist?.id ?? null,
+    });
 
     return { access_token: await this.jwt.signAsync(payload) };
   }
@@ -232,18 +230,43 @@ export class AuthService {
       throw new UnauthorizedException('Account not found.');
     }
 
-    const payload = {
+    const payload = this.buildJwtPayload({
+      user,
+      organizationName: user.organization.name,
+      accountType: user.organization.accountType,
+      artistId: user.artist?.id ?? null,
+    });
+
+    const accessToken = await this.jwt.signAsync(payload);
+    return { accessToken };
+  }
+
+  private buildJwtPayload({
+    user,
+    organizationName,
+    accountType,
+    artistId,
+  }: {
+    user: {
+      id: string;
+      name: string;
+      email: string;
+      role: Role;
+      organizationId: string;
+    };
+    organizationName: string;
+    accountType: string;
+    artistId: string | null;
+  }) {
+    return {
       sub: user.id,
       name: user.name,
       email: user.email,
       role: user.role,
       organizationId: user.organizationId,
-      organizationName: user.organization.name,
-      artistId: user.artist?.id ?? null,
-      accountType: user.organization.accountType,
+      organizationName,
+      artistId,
+      accountType,
     };
-
-    const accessToken = await this.jwt.signAsync(payload);
-    return { accessToken };
   }
 }

@@ -124,7 +124,7 @@ export class AuthController {
   @UseGuards(AuthGuard)
   @Get('users')
   getUsers(@CurrentUser() user: CurrentUserDto) {
-    return this.authService.getUsers(user.organizationId);
+    return this.authService.getUsers(user);
   }
 
   @ApiBearerAuth()
