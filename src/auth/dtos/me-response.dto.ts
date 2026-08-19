@@ -31,6 +31,9 @@ export class MeResponseDto {
   @ApiPropertyOptional()
   artistId?: string | null;
 
+  @ApiPropertyOptional()
+  profileImage?: string | null;
+
   constructor(data: Partial<MeResponseDto>) {
     Object.assign(this, data);
   }

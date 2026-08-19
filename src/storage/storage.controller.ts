@@ -18,6 +18,7 @@ export class StorageController {
       process.env.AWS_BUCKET_NAME!,
       file.originalname,
       file.buffer,
+      file.mimetype,
     );
   }
 }

@@ -54,6 +54,7 @@ export class AuthService {
       process.env.AWS_BUCKET_NAME!,
       file.originalname,
       file.buffer,
+      file.mimetype,
     );
 
     const result = await this.prisma.$transaction(async (tx) => {
@@ -178,12 +179,18 @@ export class AuthService {
     if (!user) {
       throw new UnauthorizedException('User not found');
     }
+
+    const profileImageUrl = await this.storageService.getFile(
+      process.env.AWS_BUCKET_NAME!,
+      user?.profileImageKey,
+    );
     return new MeResponseDto({
       id: user.id,
       name: user.name,
       email: user.email,
       phone: user.phone,
       role: user.role,
+      profileImage: profileImageUrl,
       organizationId: user.organizationId,
       organizationName: user.organization.name,
       artistId: user.artist?.id ?? null,
