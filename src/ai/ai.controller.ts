@@ -10,7 +10,7 @@ import {
 } from '@nestjs/swagger';
 import { AiService } from './ai.service';
 import { GenerateEventDraftDto } from './dtos/generate-event-draft.dto';
-import { AuthGuard } from 'src/auth/auth.guards';
+import { AuthGuard } from 'src/auth/guards/auth.guards';
 import { EventDraftResponseDto } from './dtos/event-draft-response.dto';
 
 @ApiTags('AI')

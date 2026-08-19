@@ -7,7 +7,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from 'src/auth/auth.guards';
+import { AuthGuard } from 'src/auth/guards/auth.guards';
 import { CurrentUserDto } from '../auth/dtos/user.dto';
 import { CurrentUser } from 'src/auth/decorators/user.decorator';
 import {

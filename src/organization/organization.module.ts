@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { OrganizationService } from './organization.service';
 import { OrganizationController } from './organization.controller';
 import { JwtModule } from '@nestjs/jwt';
-import { jwtConstants } from '../auth/constants';
+import { jwtConstants } from '../auth/constants/constants';
 
 @Module({
   imports: [

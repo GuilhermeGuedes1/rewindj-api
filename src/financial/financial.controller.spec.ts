@@ -1,7 +1,7 @@
 import { Test } from '@nestjs/testing';
 import { FinancialController } from './financial.controller';
 import { FinancialService } from './financial.service';
-import { AuthGuard } from 'src/auth/auth.guards';
+import { AuthGuard } from 'src/auth/guards/auth.guards';
 import { AccountType, Role } from 'src/generated/prisma/enums';
 
 describe('FinancialController', () => {

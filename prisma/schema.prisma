@@ -70,6 +70,8 @@ model User {
   name     String
   phone String @unique
 
+  profileImageKey String?
+
   role Role
 
   organizationId String

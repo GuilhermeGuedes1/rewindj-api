@@ -1,7 +1,7 @@
 import { Test } from '@nestjs/testing';
 import { EventsController } from './events.controller';
 import { EventsService } from './events.service';
-import { AuthGuard } from 'src/auth/auth.guards';
+import { AuthGuard } from 'src/auth/guards/auth.guards';
 import { AccountType, EventStatus, Role } from 'src/generated/prisma/enums';
 
 describe('EventsController', () => {

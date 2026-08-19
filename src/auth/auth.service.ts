@@ -14,15 +14,17 @@ import { CurrentUserDto } from './dtos/user.dto';
 import { UpdateMeDto } from './dtos/update-me.dto';
 import { MeResponseDto } from './dtos/me-response.dto';
 import { ensureCanManageOrganization } from './organization-authorization';
+import { StorageService } from 'src/storage/storage.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private prisma: PrismaService,
     private jwt: JwtService,
+    private storageService: StorageService,
   ) {}
 
-  async register(data: RegisterDto) {
+  async register(data: RegisterDto, file: Express.Multer.File) {
     const userAlreadyExists = await this.prisma.user.findUnique({
       where: {
         email: data.email,
@@ -48,6 +50,12 @@ export class AuthService {
 
     const passwordHash = await bcrypt.hash(data.password, 10);
 
+    const key = await this.storageService.uploadFile(
+      process.env.AWS_BUCKET_NAME!,
+      file.originalname,
+      file.buffer,
+    );
+
     const result = await this.prisma.$transaction(async (tx) => {
       const organization = await tx.organization.create({
         data: {
@@ -66,6 +74,7 @@ export class AuthService {
           password: passwordHash,
           role: Role.CEO,
           organizationId: organization.id,
+          profileImageKey: key,
         },
       });
 

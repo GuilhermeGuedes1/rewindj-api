@@ -7,6 +7,8 @@ import {
   Req,
   Res,
   Patch,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 
 import { AuthGuard as PassportAuthGuard } from '@nestjs/passport';
@@ -14,7 +16,7 @@ import type { Response } from 'express';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dtos/register.dto';
 import { LoginDto } from './dtos/login.dto';
-import { AuthGuard } from './auth.guards';
+import { AuthGuard } from './guards/auth.guards';
 import { CurrentUser } from './decorators/user.decorator';
 import { CurrentUserDto } from './dtos/user.dto';
 import { UserResponseDto } from './dtos/users-response.dto';
@@ -35,6 +37,7 @@ import {
   RegisterResponseDto,
 } from './dtos/auth-response.dto';
 import { MeResponseDto } from './dtos/me-response.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 type GoogleOAuthUser = {
   email?: string;
@@ -65,9 +68,13 @@ export class AuthController {
     description:
       'User, organization email, or organization document already exists.',
   })
+  @UseInterceptors(FileInterceptor('cover'))
   @Post('register')
-  async register(@Body() body: RegisterDto) {
-    const user = await this.authService.register(body);
+  async register(
+    @Body() body: RegisterDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    const user = await this.authService.register(body, file);
 
     return {
       message: 'User registered successfully',

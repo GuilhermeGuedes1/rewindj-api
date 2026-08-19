@@ -2,7 +2,7 @@ import { Test } from '@nestjs/testing';
 import { ClientsController } from './clients.controller';
 import { ClientsService } from './clients.service';
 import { Role, AccountType } from 'src/generated/prisma/client';
-import { AuthGuard } from 'src/auth/auth.guards';
+import { AuthGuard } from 'src/auth/guards/auth.guards';
 
 describe('ClientsController', () => {
   let clientsController: ClientsController;

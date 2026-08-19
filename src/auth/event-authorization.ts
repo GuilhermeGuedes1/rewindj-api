@@ -2,11 +2,6 @@ import { ForbiddenException, UnauthorizedException } from '@nestjs/common';
 import { Prisma, Role } from 'src/generated/prisma/client';
 import { CurrentUserDto } from './dtos/user.dto';
 
-/**
- * Builds the mandatory authorization scope for every query that reads or
- * changes events. Tenant isolation is always enforced; artists are further
- * restricted to their linked artist profile.
- */
 export function buildEventAuthorizationWhere(
   user: CurrentUserDto,
 ): Prisma.EventWhereInput {

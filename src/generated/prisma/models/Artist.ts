@@ -603,10 +603,6 @@ export type ArtistUncheckedUpdateOneWithoutUserNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ArtistUpdateToOneWithWhereWithoutUserInput, Prisma.ArtistUpdateWithoutUserInput>, Prisma.ArtistUncheckedUpdateWithoutUserInput>
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
 export type ArtistCreateNestedOneWithoutEventsInput = {
   create?: Prisma.XOR<Prisma.ArtistCreateWithoutEventsInput, Prisma.ArtistUncheckedCreateWithoutEventsInput>
   connectOrCreate?: Prisma.ArtistCreateOrConnectWithoutEventsInput

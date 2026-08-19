@@ -9,7 +9,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { EventsService } from './events.service';
-import { AuthGuard } from 'src/auth/auth.guards';
+import { AuthGuard } from 'src/auth/guards/auth.guards';
 import { CreateEventDto } from './dtos/create-event.dto';
 import { CurrentUser } from 'src/auth/decorators/user.decorator';
 import { CurrentUserDto } from 'src/auth/dtos/user.dto';

@@ -204,3 +204,23 @@ All data is isolated by organization.
 Rewindj aims to become the operating system for DJs, artists and agencies.
 
 The goal is to centralize event management, artist relationships, negotiations, payments and AI-powered workflows into a single platform.
+
+---
+
+## Dados de demonstração
+
+Para criar dados locais de demonstração, suba o PostgreSQL e execute:
+
+```bash
+yarn db:seed
+```
+
+O seed pode ser executado novamente sem duplicar dados: ele recria somente as
+duas organizações de demonstração identificadas como `SEED-AGENCY-0001` e
+`SEED-INDEPENDENT-0001`.
+
+Ele cria uma agência com CEO, ADMIN, PRODUCER e três artistas, além de clientes
+e eventos confirmados, em negociação e perdidos. Também cria um artista
+independente com clientes e eventos próprios.
+
+Todas as contas usam a senha `RewindJ@123`.
