@@ -5,8 +5,11 @@ import {
   Param,
   Patch,
   Post,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from 'src/auth/guards/auth.guards';
 import { CurrentUserDto } from '../auth/dtos/user.dto';
 import { CurrentUser } from 'src/auth/decorators/user.decorator';
@@ -91,6 +94,16 @@ export class ArtistsController {
   @Patch('me')
   updateMe(@Body() data: UpdateArtistDto, @CurrentUser() user: CurrentUserDto) {
     return this.artistsService.updateMe(data, user);
+  }
+
+  @Post('me/profile-image')
+  @UseGuards(AuthGuard)
+  @UseInterceptors(FileInterceptor('profileImage'))
+  updateProfileImage(
+    @UploadedFile() file: Express.Multer.File,
+    @CurrentUser() user: CurrentUserDto,
+  ) {
+    return this.artistsService.updateProfileImage(file, user);
   }
 
   @ApiOperation({

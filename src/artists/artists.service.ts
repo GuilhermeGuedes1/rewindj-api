@@ -14,10 +14,14 @@ import * as bcrypt from 'bcrypt';
 import { Role } from 'src/generated/prisma/enums';
 import { randomUUID } from 'crypto';
 import { ensureCanManageOrganization } from 'src/auth/organization-authorization';
+import { StorageService } from 'src/storage/storage.service';
 
 @Injectable()
 export class ArtistsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly storageService: StorageService,
+  ) {}
 
   async getMe(user: CurrentUserDto) {
     const artist = await this.prisma.artist.findUnique({
@@ -30,7 +34,15 @@ export class ArtistsService {
       throw new NotFoundException('Artist profile not found');
     }
 
-    return new ArtistResponseDto(artist);
+    const profileImageUrl = await this.storageService.getFile(
+      process.env.AWS_BUCKET_NAME!,
+      artist.profileImageKey,
+    );
+
+    return {
+      ...new ArtistResponseDto(artist),
+      profileImageUrl,
+    };
   }
 
   async findAll(user: CurrentUserDto) {
@@ -45,7 +57,19 @@ export class ArtistsService {
       },
     });
 
-    return artists.map((artist) => new ArtistResponseDto(artist));
+    return Promise.all(
+      artists.map(async (artist) => {
+        const profileImageUrl = await this.storageService.getFile(
+          process.env.AWS_BUCKET_NAME!,
+          artist.profileImageKey,
+        );
+
+        return {
+          ...new ArtistResponseDto(artist),
+          profileImageUrl,
+        };
+      }),
+    );
   }
 
   async getEvents(user: CurrentUserDto) {
@@ -146,6 +170,39 @@ export class ArtistsService {
     };
   }
 
+  async updateProfileImage(file: Express.Multer.File, user: CurrentUserDto) {
+    const artist = await this.prisma.artist.findUnique({
+      where: {
+        userId: user.sub,
+      },
+    });
+
+    if (!artist) {
+      throw new NotFoundException('Artist profile not found');
+    }
+
+    const key = await this.storageService.uploadFile(
+      process.env.AWS_BUCKET_NAME!,
+      file.originalname,
+      file.buffer,
+      file.mimetype,
+    );
+
+    const updatedArtist = await this.prisma.artist.update({
+      where: {
+        id: artist.id,
+      },
+      data: {
+        profileImageKey: key,
+      },
+    });
+
+    return {
+      message: 'Profile image updated successfully',
+      artist: new ArtistResponseDto(updatedArtist),
+    };
+  }
+
   async registerArtist(body: RegisterArtistDto) {
     const existingUser = await this.prisma.user.findUnique({
       where: {
@@ -234,6 +291,7 @@ export class ArtistsService {
         city: data.city,
         state: data.state,
         pixKey: data.pixKey,
+        profileImageKey: data.profileImageKey,
       },
     });
 

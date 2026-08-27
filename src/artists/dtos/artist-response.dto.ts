@@ -76,6 +76,13 @@ export class ArtistResponseDto {
   })
   updatedAt: Date;
 
+  @ApiPropertyOptional({
+    example: 'users/77d3f7a7-c4e8-41e4-9f71-a2de4b580a85-testeImagem.png',
+    nullable: true,
+    description: 'S3 key of the artist profile image.',
+  })
+  profileImageKey: string | null;
+
   constructor(artist: Artist) {
     this.id = artist.id;
     this.name = artist.name ?? undefined;
@@ -92,5 +99,7 @@ export class ArtistResponseDto {
 
     this.createdAt = artist.createdAt;
     this.updatedAt = artist.updatedAt;
+
+    this.profileImageKey = artist.profileImageKey;
   }
 }
