@@ -226,8 +226,7 @@ export class AuthService {
       organizationId: user.artist.organizationId ?? undefined,
       organizationName: user.artist.organization?.name,
       artistId: user.artist.id,
-      isIndependent: user.artist.isIndependent
-    
+      isIndependent: user.artist.isIndependent,
     });
   }
 
