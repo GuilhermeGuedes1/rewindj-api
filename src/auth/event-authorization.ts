@@ -5,6 +5,19 @@ import { CurrentUserDto } from './dtos/user.dto';
 export function buildEventAuthorizationWhere(
   user: CurrentUserDto,
 ): Prisma.EventWhereInput {
+  if (user.role === Role.ARTIST && user.isIndependent) {
+    if (!user.artistId) {
+      throw new ForbiddenException(
+        'Independent artist has no linked artist profile',
+      );
+    }
+
+    return {
+      organizationId: null,
+      artistId: user.artistId,
+    };
+  }
+
   if (!user.organizationId) {
     throw new UnauthorizedException('Authenticated user has no organization');
   }

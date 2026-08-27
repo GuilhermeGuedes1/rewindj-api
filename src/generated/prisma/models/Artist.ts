@@ -30,11 +30,13 @@ export type ArtistMinAggregateOutputType = {
   stageName: string | null
   birthDate: Date | null
   phone: string | null
-  email: string | null
+  profileImageKey: string | null
   address: string | null
   city: string | null
   state: string | null
   pixKey: string | null
+  isIndependent: boolean | null
+  role: $Enums.Role | null
   userId: string | null
   organizationId: string | null
   createdAt: Date | null
@@ -47,11 +49,13 @@ export type ArtistMaxAggregateOutputType = {
   stageName: string | null
   birthDate: Date | null
   phone: string | null
-  email: string | null
+  profileImageKey: string | null
   address: string | null
   city: string | null
   state: string | null
   pixKey: string | null
+  isIndependent: boolean | null
+  role: $Enums.Role | null
   userId: string | null
   organizationId: string | null
   createdAt: Date | null
@@ -64,11 +68,13 @@ export type ArtistCountAggregateOutputType = {
   stageName: number
   birthDate: number
   phone: number
-  email: number
+  profileImageKey: number
   address: number
   city: number
   state: number
   pixKey: number
+  isIndependent: number
+  role: number
   userId: number
   organizationId: number
   createdAt: number
@@ -83,11 +89,13 @@ export type ArtistMinAggregateInputType = {
   stageName?: true
   birthDate?: true
   phone?: true
-  email?: true
+  profileImageKey?: true
   address?: true
   city?: true
   state?: true
   pixKey?: true
+  isIndependent?: true
+  role?: true
   userId?: true
   organizationId?: true
   createdAt?: true
@@ -100,11 +108,13 @@ export type ArtistMaxAggregateInputType = {
   stageName?: true
   birthDate?: true
   phone?: true
-  email?: true
+  profileImageKey?: true
   address?: true
   city?: true
   state?: true
   pixKey?: true
+  isIndependent?: true
+  role?: true
   userId?: true
   organizationId?: true
   createdAt?: true
@@ -117,11 +127,13 @@ export type ArtistCountAggregateInputType = {
   stageName?: true
   birthDate?: true
   phone?: true
-  email?: true
+  profileImageKey?: true
   address?: true
   city?: true
   state?: true
   pixKey?: true
+  isIndependent?: true
+  role?: true
   userId?: true
   organizationId?: true
   createdAt?: true
@@ -203,17 +215,19 @@ export type ArtistGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 
 export type ArtistGroupByOutputType = {
   id: string
-  name: string
-  stageName: string
+  name: string | null
+  stageName: string | null
   birthDate: Date | null
   phone: string | null
-  email: string | null
+  profileImageKey: string | null
   address: string | null
   city: string | null
   state: string | null
   pixKey: string | null
+  isIndependent: boolean
+  role: $Enums.Role
   userId: string | null
-  organizationId: string
+  organizationId: string | null
   createdAt: Date
   updatedAt: Date
   _count: ArtistCountAggregateOutputType | null
@@ -241,80 +255,94 @@ export type ArtistWhereInput = {
   OR?: Prisma.ArtistWhereInput[]
   NOT?: Prisma.ArtistWhereInput | Prisma.ArtistWhereInput[]
   id?: Prisma.StringFilter<"Artist"> | string
-  name?: Prisma.StringFilter<"Artist"> | string
-  stageName?: Prisma.StringFilter<"Artist"> | string
+  name?: Prisma.StringNullableFilter<"Artist"> | string | null
+  stageName?: Prisma.StringNullableFilter<"Artist"> | string | null
   birthDate?: Prisma.DateTimeNullableFilter<"Artist"> | Date | string | null
   phone?: Prisma.StringNullableFilter<"Artist"> | string | null
-  email?: Prisma.StringNullableFilter<"Artist"> | string | null
+  profileImageKey?: Prisma.StringNullableFilter<"Artist"> | string | null
   address?: Prisma.StringNullableFilter<"Artist"> | string | null
   city?: Prisma.StringNullableFilter<"Artist"> | string | null
   state?: Prisma.StringNullableFilter<"Artist"> | string | null
   pixKey?: Prisma.StringNullableFilter<"Artist"> | string | null
+  isIndependent?: Prisma.BoolFilter<"Artist"> | boolean
+  role?: Prisma.EnumRoleFilter<"Artist"> | $Enums.Role
   userId?: Prisma.StringNullableFilter<"Artist"> | string | null
-  organizationId?: Prisma.StringFilter<"Artist"> | string
+  organizationId?: Prisma.StringNullableFilter<"Artist"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Artist"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Artist"> | Date | string
+  invitesCreated?: Prisma.InviteListRelationFilter
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
-  organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
+  organization?: Prisma.XOR<Prisma.OrganizationNullableScalarRelationFilter, Prisma.OrganizationWhereInput> | null
   events?: Prisma.EventListRelationFilter
+  clients?: Prisma.ClientListRelationFilter
 }
 
 export type ArtistOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  name?: Prisma.SortOrder
-  stageName?: Prisma.SortOrder
+  name?: Prisma.SortOrderInput | Prisma.SortOrder
+  stageName?: Prisma.SortOrderInput | Prisma.SortOrder
   birthDate?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
-  email?: Prisma.SortOrderInput | Prisma.SortOrder
+  profileImageKey?: Prisma.SortOrderInput | Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
   city?: Prisma.SortOrderInput | Prisma.SortOrder
   state?: Prisma.SortOrderInput | Prisma.SortOrder
   pixKey?: Prisma.SortOrderInput | Prisma.SortOrder
+  isIndependent?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   userId?: Prisma.SortOrderInput | Prisma.SortOrder
-  organizationId?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  invitesCreated?: Prisma.InviteOrderByRelationAggregateInput
   user?: Prisma.UserOrderByWithRelationInput
   organization?: Prisma.OrganizationOrderByWithRelationInput
   events?: Prisma.EventOrderByRelationAggregateInput
+  clients?: Prisma.ClientOrderByRelationAggregateInput
 }
 
 export type ArtistWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  email?: string
   userId?: string
   AND?: Prisma.ArtistWhereInput | Prisma.ArtistWhereInput[]
   OR?: Prisma.ArtistWhereInput[]
   NOT?: Prisma.ArtistWhereInput | Prisma.ArtistWhereInput[]
-  name?: Prisma.StringFilter<"Artist"> | string
-  stageName?: Prisma.StringFilter<"Artist"> | string
+  name?: Prisma.StringNullableFilter<"Artist"> | string | null
+  stageName?: Prisma.StringNullableFilter<"Artist"> | string | null
   birthDate?: Prisma.DateTimeNullableFilter<"Artist"> | Date | string | null
   phone?: Prisma.StringNullableFilter<"Artist"> | string | null
+  profileImageKey?: Prisma.StringNullableFilter<"Artist"> | string | null
   address?: Prisma.StringNullableFilter<"Artist"> | string | null
   city?: Prisma.StringNullableFilter<"Artist"> | string | null
   state?: Prisma.StringNullableFilter<"Artist"> | string | null
   pixKey?: Prisma.StringNullableFilter<"Artist"> | string | null
-  organizationId?: Prisma.StringFilter<"Artist"> | string
+  isIndependent?: Prisma.BoolFilter<"Artist"> | boolean
+  role?: Prisma.EnumRoleFilter<"Artist"> | $Enums.Role
+  organizationId?: Prisma.StringNullableFilter<"Artist"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Artist"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Artist"> | Date | string
+  invitesCreated?: Prisma.InviteListRelationFilter
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
-  organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
+  organization?: Prisma.XOR<Prisma.OrganizationNullableScalarRelationFilter, Prisma.OrganizationWhereInput> | null
   events?: Prisma.EventListRelationFilter
-}, "id" | "email" | "userId">
+  clients?: Prisma.ClientListRelationFilter
+}, "id" | "userId">
 
 export type ArtistOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  name?: Prisma.SortOrder
-  stageName?: Prisma.SortOrder
+  name?: Prisma.SortOrderInput | Prisma.SortOrder
+  stageName?: Prisma.SortOrderInput | Prisma.SortOrder
   birthDate?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
-  email?: Prisma.SortOrderInput | Prisma.SortOrder
+  profileImageKey?: Prisma.SortOrderInput | Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
   city?: Prisma.SortOrderInput | Prisma.SortOrder
   state?: Prisma.SortOrderInput | Prisma.SortOrder
   pixKey?: Prisma.SortOrderInput | Prisma.SortOrder
+  isIndependent?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   userId?: Prisma.SortOrderInput | Prisma.SortOrder
-  organizationId?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.ArtistCountOrderByAggregateInput
@@ -327,138 +355,162 @@ export type ArtistScalarWhereWithAggregatesInput = {
   OR?: Prisma.ArtistScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ArtistScalarWhereWithAggregatesInput | Prisma.ArtistScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Artist"> | string
-  name?: Prisma.StringWithAggregatesFilter<"Artist"> | string
-  stageName?: Prisma.StringWithAggregatesFilter<"Artist"> | string
+  name?: Prisma.StringNullableWithAggregatesFilter<"Artist"> | string | null
+  stageName?: Prisma.StringNullableWithAggregatesFilter<"Artist"> | string | null
   birthDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Artist"> | Date | string | null
   phone?: Prisma.StringNullableWithAggregatesFilter<"Artist"> | string | null
-  email?: Prisma.StringNullableWithAggregatesFilter<"Artist"> | string | null
+  profileImageKey?: Prisma.StringNullableWithAggregatesFilter<"Artist"> | string | null
   address?: Prisma.StringNullableWithAggregatesFilter<"Artist"> | string | null
   city?: Prisma.StringNullableWithAggregatesFilter<"Artist"> | string | null
   state?: Prisma.StringNullableWithAggregatesFilter<"Artist"> | string | null
   pixKey?: Prisma.StringNullableWithAggregatesFilter<"Artist"> | string | null
+  isIndependent?: Prisma.BoolWithAggregatesFilter<"Artist"> | boolean
+  role?: Prisma.EnumRoleWithAggregatesFilter<"Artist"> | $Enums.Role
   userId?: Prisma.StringNullableWithAggregatesFilter<"Artist"> | string | null
-  organizationId?: Prisma.StringWithAggregatesFilter<"Artist"> | string
+  organizationId?: Prisma.StringNullableWithAggregatesFilter<"Artist"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Artist"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Artist"> | Date | string
 }
 
 export type ArtistCreateInput = {
   id?: string
-  name: string
-  stageName: string
+  name?: string | null
+  stageName?: string | null
   birthDate?: Date | string | null
   phone?: string | null
-  email?: string | null
+  profileImageKey?: string | null
   address?: string | null
   city?: string | null
   state?: string | null
   pixKey?: string | null
+  isIndependent?: boolean
+  role?: $Enums.Role
   createdAt?: Date | string
   updatedAt?: Date | string
+  invitesCreated?: Prisma.InviteCreateNestedManyWithoutCreatedByArtistInput
   user?: Prisma.UserCreateNestedOneWithoutArtistInput
-  organization: Prisma.OrganizationCreateNestedOneWithoutArtistsInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutArtistsInput
   events?: Prisma.EventCreateNestedManyWithoutArtistInput
+  clients?: Prisma.ClientCreateNestedManyWithoutArtistInput
 }
 
 export type ArtistUncheckedCreateInput = {
   id?: string
-  name: string
-  stageName: string
+  name?: string | null
+  stageName?: string | null
   birthDate?: Date | string | null
   phone?: string | null
-  email?: string | null
+  profileImageKey?: string | null
   address?: string | null
   city?: string | null
   state?: string | null
   pixKey?: string | null
+  isIndependent?: boolean
+  role?: $Enums.Role
   userId?: string | null
-  organizationId: string
+  organizationId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  invitesCreated?: Prisma.InviteUncheckedCreateNestedManyWithoutCreatedByArtistInput
   events?: Prisma.EventUncheckedCreateNestedManyWithoutArtistInput
+  clients?: Prisma.ClientUncheckedCreateNestedManyWithoutArtistInput
 }
 
 export type ArtistUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  stageName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stageName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileImageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pixKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isIndependent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  invitesCreated?: Prisma.InviteUpdateManyWithoutCreatedByArtistNestedInput
   user?: Prisma.UserUpdateOneWithoutArtistNestedInput
-  organization?: Prisma.OrganizationUpdateOneRequiredWithoutArtistsNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutArtistsNestedInput
   events?: Prisma.EventUpdateManyWithoutArtistNestedInput
+  clients?: Prisma.ClientUpdateManyWithoutArtistNestedInput
 }
 
 export type ArtistUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  stageName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stageName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileImageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pixKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isIndependent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  invitesCreated?: Prisma.InviteUncheckedUpdateManyWithoutCreatedByArtistNestedInput
   events?: Prisma.EventUncheckedUpdateManyWithoutArtistNestedInput
+  clients?: Prisma.ClientUncheckedUpdateManyWithoutArtistNestedInput
 }
 
 export type ArtistCreateManyInput = {
   id?: string
-  name: string
-  stageName: string
+  name?: string | null
+  stageName?: string | null
   birthDate?: Date | string | null
   phone?: string | null
-  email?: string | null
+  profileImageKey?: string | null
   address?: string | null
   city?: string | null
   state?: string | null
   pixKey?: string | null
+  isIndependent?: boolean
+  role?: $Enums.Role
   userId?: string | null
-  organizationId: string
+  organizationId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type ArtistUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  stageName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stageName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileImageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pixKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isIndependent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ArtistUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  stageName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stageName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileImageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pixKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isIndependent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -484,11 +536,13 @@ export type ArtistCountOrderByAggregateInput = {
   stageName?: Prisma.SortOrder
   birthDate?: Prisma.SortOrder
   phone?: Prisma.SortOrder
-  email?: Prisma.SortOrder
+  profileImageKey?: Prisma.SortOrder
   address?: Prisma.SortOrder
   city?: Prisma.SortOrder
   state?: Prisma.SortOrder
   pixKey?: Prisma.SortOrder
+  isIndependent?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -501,11 +555,13 @@ export type ArtistMaxOrderByAggregateInput = {
   stageName?: Prisma.SortOrder
   birthDate?: Prisma.SortOrder
   phone?: Prisma.SortOrder
-  email?: Prisma.SortOrder
+  profileImageKey?: Prisma.SortOrder
   address?: Prisma.SortOrder
   city?: Prisma.SortOrder
   state?: Prisma.SortOrder
   pixKey?: Prisma.SortOrder
+  isIndependent?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -518,11 +574,13 @@ export type ArtistMinOrderByAggregateInput = {
   stageName?: Prisma.SortOrder
   birthDate?: Prisma.SortOrder
   phone?: Prisma.SortOrder
-  email?: Prisma.SortOrder
+  profileImageKey?: Prisma.SortOrder
   address?: Prisma.SortOrder
   city?: Prisma.SortOrder
   state?: Prisma.SortOrder
   pixKey?: Prisma.SortOrder
+  isIndependent?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -571,6 +629,22 @@ export type ArtistUncheckedUpdateManyWithoutOrganizationNestedInput = {
   deleteMany?: Prisma.ArtistScalarWhereInput | Prisma.ArtistScalarWhereInput[]
 }
 
+export type ArtistCreateNestedOneWithoutInvitesCreatedInput = {
+  create?: Prisma.XOR<Prisma.ArtistCreateWithoutInvitesCreatedInput, Prisma.ArtistUncheckedCreateWithoutInvitesCreatedInput>
+  connectOrCreate?: Prisma.ArtistCreateOrConnectWithoutInvitesCreatedInput
+  connect?: Prisma.ArtistWhereUniqueInput
+}
+
+export type ArtistUpdateOneWithoutInvitesCreatedNestedInput = {
+  create?: Prisma.XOR<Prisma.ArtistCreateWithoutInvitesCreatedInput, Prisma.ArtistUncheckedCreateWithoutInvitesCreatedInput>
+  connectOrCreate?: Prisma.ArtistCreateOrConnectWithoutInvitesCreatedInput
+  upsert?: Prisma.ArtistUpsertWithoutInvitesCreatedInput
+  disconnect?: Prisma.ArtistWhereInput | boolean
+  delete?: Prisma.ArtistWhereInput | boolean
+  connect?: Prisma.ArtistWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ArtistUpdateToOneWithWhereWithoutInvitesCreatedInput, Prisma.ArtistUpdateWithoutInvitesCreatedInput>, Prisma.ArtistUncheckedUpdateWithoutInvitesCreatedInput>
+}
+
 export type ArtistCreateNestedOneWithoutUserInput = {
   create?: Prisma.XOR<Prisma.ArtistCreateWithoutUserInput, Prisma.ArtistUncheckedCreateWithoutUserInput>
   connectOrCreate?: Prisma.ArtistCreateOrConnectWithoutUserInput
@@ -603,6 +677,26 @@ export type ArtistUncheckedUpdateOneWithoutUserNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ArtistUpdateToOneWithWhereWithoutUserInput, Prisma.ArtistUpdateWithoutUserInput>, Prisma.ArtistUncheckedUpdateWithoutUserInput>
 }
 
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
+}
+
+export type ArtistCreateNestedOneWithoutClientsInput = {
+  create?: Prisma.XOR<Prisma.ArtistCreateWithoutClientsInput, Prisma.ArtistUncheckedCreateWithoutClientsInput>
+  connectOrCreate?: Prisma.ArtistCreateOrConnectWithoutClientsInput
+  connect?: Prisma.ArtistWhereUniqueInput
+}
+
+export type ArtistUpdateOneWithoutClientsNestedInput = {
+  create?: Prisma.XOR<Prisma.ArtistCreateWithoutClientsInput, Prisma.ArtistUncheckedCreateWithoutClientsInput>
+  connectOrCreate?: Prisma.ArtistCreateOrConnectWithoutClientsInput
+  upsert?: Prisma.ArtistUpsertWithoutClientsInput
+  disconnect?: Prisma.ArtistWhereInput | boolean
+  delete?: Prisma.ArtistWhereInput | boolean
+  connect?: Prisma.ArtistWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ArtistUpdateToOneWithWhereWithoutClientsInput, Prisma.ArtistUpdateWithoutClientsInput>, Prisma.ArtistUncheckedUpdateWithoutClientsInput>
+}
+
 export type ArtistCreateNestedOneWithoutEventsInput = {
   create?: Prisma.XOR<Prisma.ArtistCreateWithoutEventsInput, Prisma.ArtistUncheckedCreateWithoutEventsInput>
   connectOrCreate?: Prisma.ArtistCreateOrConnectWithoutEventsInput
@@ -621,36 +715,44 @@ export type ArtistUpdateOneWithoutEventsNestedInput = {
 
 export type ArtistCreateWithoutOrganizationInput = {
   id?: string
-  name: string
-  stageName: string
+  name?: string | null
+  stageName?: string | null
   birthDate?: Date | string | null
   phone?: string | null
-  email?: string | null
+  profileImageKey?: string | null
   address?: string | null
   city?: string | null
   state?: string | null
   pixKey?: string | null
+  isIndependent?: boolean
+  role?: $Enums.Role
   createdAt?: Date | string
   updatedAt?: Date | string
+  invitesCreated?: Prisma.InviteCreateNestedManyWithoutCreatedByArtistInput
   user?: Prisma.UserCreateNestedOneWithoutArtistInput
   events?: Prisma.EventCreateNestedManyWithoutArtistInput
+  clients?: Prisma.ClientCreateNestedManyWithoutArtistInput
 }
 
 export type ArtistUncheckedCreateWithoutOrganizationInput = {
   id?: string
-  name: string
-  stageName: string
+  name?: string | null
+  stageName?: string | null
   birthDate?: Date | string | null
   phone?: string | null
-  email?: string | null
+  profileImageKey?: string | null
   address?: string | null
   city?: string | null
   state?: string | null
   pixKey?: string | null
+  isIndependent?: boolean
+  role?: $Enums.Role
   userId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  invitesCreated?: Prisma.InviteUncheckedCreateNestedManyWithoutCreatedByArtistInput
   events?: Prisma.EventUncheckedCreateNestedManyWithoutArtistInput
+  clients?: Prisma.ClientUncheckedCreateNestedManyWithoutArtistInput
 }
 
 export type ArtistCreateOrConnectWithoutOrganizationInput = {
@@ -684,53 +786,163 @@ export type ArtistScalarWhereInput = {
   OR?: Prisma.ArtistScalarWhereInput[]
   NOT?: Prisma.ArtistScalarWhereInput | Prisma.ArtistScalarWhereInput[]
   id?: Prisma.StringFilter<"Artist"> | string
-  name?: Prisma.StringFilter<"Artist"> | string
-  stageName?: Prisma.StringFilter<"Artist"> | string
+  name?: Prisma.StringNullableFilter<"Artist"> | string | null
+  stageName?: Prisma.StringNullableFilter<"Artist"> | string | null
   birthDate?: Prisma.DateTimeNullableFilter<"Artist"> | Date | string | null
   phone?: Prisma.StringNullableFilter<"Artist"> | string | null
-  email?: Prisma.StringNullableFilter<"Artist"> | string | null
+  profileImageKey?: Prisma.StringNullableFilter<"Artist"> | string | null
   address?: Prisma.StringNullableFilter<"Artist"> | string | null
   city?: Prisma.StringNullableFilter<"Artist"> | string | null
   state?: Prisma.StringNullableFilter<"Artist"> | string | null
   pixKey?: Prisma.StringNullableFilter<"Artist"> | string | null
+  isIndependent?: Prisma.BoolFilter<"Artist"> | boolean
+  role?: Prisma.EnumRoleFilter<"Artist"> | $Enums.Role
   userId?: Prisma.StringNullableFilter<"Artist"> | string | null
-  organizationId?: Prisma.StringFilter<"Artist"> | string
+  organizationId?: Prisma.StringNullableFilter<"Artist"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Artist"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Artist"> | Date | string
 }
 
-export type ArtistCreateWithoutUserInput = {
+export type ArtistCreateWithoutInvitesCreatedInput = {
   id?: string
-  name: string
-  stageName: string
+  name?: string | null
+  stageName?: string | null
   birthDate?: Date | string | null
   phone?: string | null
-  email?: string | null
+  profileImageKey?: string | null
   address?: string | null
   city?: string | null
   state?: string | null
   pixKey?: string | null
+  isIndependent?: boolean
+  role?: $Enums.Role
   createdAt?: Date | string
   updatedAt?: Date | string
-  organization: Prisma.OrganizationCreateNestedOneWithoutArtistsInput
+  user?: Prisma.UserCreateNestedOneWithoutArtistInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutArtistsInput
   events?: Prisma.EventCreateNestedManyWithoutArtistInput
+  clients?: Prisma.ClientCreateNestedManyWithoutArtistInput
+}
+
+export type ArtistUncheckedCreateWithoutInvitesCreatedInput = {
+  id?: string
+  name?: string | null
+  stageName?: string | null
+  birthDate?: Date | string | null
+  phone?: string | null
+  profileImageKey?: string | null
+  address?: string | null
+  city?: string | null
+  state?: string | null
+  pixKey?: string | null
+  isIndependent?: boolean
+  role?: $Enums.Role
+  userId?: string | null
+  organizationId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutArtistInput
+  clients?: Prisma.ClientUncheckedCreateNestedManyWithoutArtistInput
+}
+
+export type ArtistCreateOrConnectWithoutInvitesCreatedInput = {
+  where: Prisma.ArtistWhereUniqueInput
+  create: Prisma.XOR<Prisma.ArtistCreateWithoutInvitesCreatedInput, Prisma.ArtistUncheckedCreateWithoutInvitesCreatedInput>
+}
+
+export type ArtistUpsertWithoutInvitesCreatedInput = {
+  update: Prisma.XOR<Prisma.ArtistUpdateWithoutInvitesCreatedInput, Prisma.ArtistUncheckedUpdateWithoutInvitesCreatedInput>
+  create: Prisma.XOR<Prisma.ArtistCreateWithoutInvitesCreatedInput, Prisma.ArtistUncheckedCreateWithoutInvitesCreatedInput>
+  where?: Prisma.ArtistWhereInput
+}
+
+export type ArtistUpdateToOneWithWhereWithoutInvitesCreatedInput = {
+  where?: Prisma.ArtistWhereInput
+  data: Prisma.XOR<Prisma.ArtistUpdateWithoutInvitesCreatedInput, Prisma.ArtistUncheckedUpdateWithoutInvitesCreatedInput>
+}
+
+export type ArtistUpdateWithoutInvitesCreatedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stageName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileImageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pixKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isIndependent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneWithoutArtistNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutArtistsNestedInput
+  events?: Prisma.EventUpdateManyWithoutArtistNestedInput
+  clients?: Prisma.ClientUpdateManyWithoutArtistNestedInput
+}
+
+export type ArtistUncheckedUpdateWithoutInvitesCreatedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stageName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileImageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pixKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isIndependent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  events?: Prisma.EventUncheckedUpdateManyWithoutArtistNestedInput
+  clients?: Prisma.ClientUncheckedUpdateManyWithoutArtistNestedInput
+}
+
+export type ArtistCreateWithoutUserInput = {
+  id?: string
+  name?: string | null
+  stageName?: string | null
+  birthDate?: Date | string | null
+  phone?: string | null
+  profileImageKey?: string | null
+  address?: string | null
+  city?: string | null
+  state?: string | null
+  pixKey?: string | null
+  isIndependent?: boolean
+  role?: $Enums.Role
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  invitesCreated?: Prisma.InviteCreateNestedManyWithoutCreatedByArtistInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutArtistsInput
+  events?: Prisma.EventCreateNestedManyWithoutArtistInput
+  clients?: Prisma.ClientCreateNestedManyWithoutArtistInput
 }
 
 export type ArtistUncheckedCreateWithoutUserInput = {
   id?: string
-  name: string
-  stageName: string
+  name?: string | null
+  stageName?: string | null
   birthDate?: Date | string | null
   phone?: string | null
-  email?: string | null
+  profileImageKey?: string | null
   address?: string | null
   city?: string | null
   state?: string | null
   pixKey?: string | null
-  organizationId: string
+  isIndependent?: boolean
+  role?: $Enums.Role
+  organizationId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  invitesCreated?: Prisma.InviteUncheckedCreateNestedManyWithoutCreatedByArtistInput
   events?: Prisma.EventUncheckedCreateNestedManyWithoutArtistInput
+  clients?: Prisma.ClientUncheckedCreateNestedManyWithoutArtistInput
 }
 
 export type ArtistCreateOrConnectWithoutUserInput = {
@@ -751,70 +963,186 @@ export type ArtistUpdateToOneWithWhereWithoutUserInput = {
 
 export type ArtistUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  stageName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stageName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileImageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pixKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isIndependent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  organization?: Prisma.OrganizationUpdateOneRequiredWithoutArtistsNestedInput
+  invitesCreated?: Prisma.InviteUpdateManyWithoutCreatedByArtistNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutArtistsNestedInput
   events?: Prisma.EventUpdateManyWithoutArtistNestedInput
+  clients?: Prisma.ClientUpdateManyWithoutArtistNestedInput
 }
 
 export type ArtistUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  stageName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stageName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileImageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pixKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  isIndependent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  invitesCreated?: Prisma.InviteUncheckedUpdateManyWithoutCreatedByArtistNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutArtistNestedInput
+  clients?: Prisma.ClientUncheckedUpdateManyWithoutArtistNestedInput
+}
+
+export type ArtistCreateWithoutClientsInput = {
+  id?: string
+  name?: string | null
+  stageName?: string | null
+  birthDate?: Date | string | null
+  phone?: string | null
+  profileImageKey?: string | null
+  address?: string | null
+  city?: string | null
+  state?: string | null
+  pixKey?: string | null
+  isIndependent?: boolean
+  role?: $Enums.Role
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  invitesCreated?: Prisma.InviteCreateNestedManyWithoutCreatedByArtistInput
+  user?: Prisma.UserCreateNestedOneWithoutArtistInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutArtistsInput
+  events?: Prisma.EventCreateNestedManyWithoutArtistInput
+}
+
+export type ArtistUncheckedCreateWithoutClientsInput = {
+  id?: string
+  name?: string | null
+  stageName?: string | null
+  birthDate?: Date | string | null
+  phone?: string | null
+  profileImageKey?: string | null
+  address?: string | null
+  city?: string | null
+  state?: string | null
+  pixKey?: string | null
+  isIndependent?: boolean
+  role?: $Enums.Role
+  userId?: string | null
+  organizationId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  invitesCreated?: Prisma.InviteUncheckedCreateNestedManyWithoutCreatedByArtistInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutArtistInput
+}
+
+export type ArtistCreateOrConnectWithoutClientsInput = {
+  where: Prisma.ArtistWhereUniqueInput
+  create: Prisma.XOR<Prisma.ArtistCreateWithoutClientsInput, Prisma.ArtistUncheckedCreateWithoutClientsInput>
+}
+
+export type ArtistUpsertWithoutClientsInput = {
+  update: Prisma.XOR<Prisma.ArtistUpdateWithoutClientsInput, Prisma.ArtistUncheckedUpdateWithoutClientsInput>
+  create: Prisma.XOR<Prisma.ArtistCreateWithoutClientsInput, Prisma.ArtistUncheckedCreateWithoutClientsInput>
+  where?: Prisma.ArtistWhereInput
+}
+
+export type ArtistUpdateToOneWithWhereWithoutClientsInput = {
+  where?: Prisma.ArtistWhereInput
+  data: Prisma.XOR<Prisma.ArtistUpdateWithoutClientsInput, Prisma.ArtistUncheckedUpdateWithoutClientsInput>
+}
+
+export type ArtistUpdateWithoutClientsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stageName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileImageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pixKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isIndependent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  invitesCreated?: Prisma.InviteUpdateManyWithoutCreatedByArtistNestedInput
+  user?: Prisma.UserUpdateOneWithoutArtistNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutArtistsNestedInput
+  events?: Prisma.EventUpdateManyWithoutArtistNestedInput
+}
+
+export type ArtistUncheckedUpdateWithoutClientsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stageName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileImageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pixKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isIndependent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  invitesCreated?: Prisma.InviteUncheckedUpdateManyWithoutCreatedByArtistNestedInput
   events?: Prisma.EventUncheckedUpdateManyWithoutArtistNestedInput
 }
 
 export type ArtistCreateWithoutEventsInput = {
   id?: string
-  name: string
-  stageName: string
+  name?: string | null
+  stageName?: string | null
   birthDate?: Date | string | null
   phone?: string | null
-  email?: string | null
+  profileImageKey?: string | null
   address?: string | null
   city?: string | null
   state?: string | null
   pixKey?: string | null
+  isIndependent?: boolean
+  role?: $Enums.Role
   createdAt?: Date | string
   updatedAt?: Date | string
+  invitesCreated?: Prisma.InviteCreateNestedManyWithoutCreatedByArtistInput
   user?: Prisma.UserCreateNestedOneWithoutArtistInput
-  organization: Prisma.OrganizationCreateNestedOneWithoutArtistsInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutArtistsInput
+  clients?: Prisma.ClientCreateNestedManyWithoutArtistInput
 }
 
 export type ArtistUncheckedCreateWithoutEventsInput = {
   id?: string
-  name: string
-  stageName: string
+  name?: string | null
+  stageName?: string | null
   birthDate?: Date | string | null
   phone?: string | null
-  email?: string | null
+  profileImageKey?: string | null
   address?: string | null
   city?: string | null
   state?: string | null
   pixKey?: string | null
+  isIndependent?: boolean
+  role?: $Enums.Role
   userId?: string | null
-  organizationId: string
+  organizationId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  invitesCreated?: Prisma.InviteUncheckedCreateNestedManyWithoutCreatedByArtistInput
+  clients?: Prisma.ClientUncheckedCreateNestedManyWithoutArtistInput
 }
 
 export type ArtistCreateOrConnectWithoutEventsInput = {
@@ -835,49 +1163,59 @@ export type ArtistUpdateToOneWithWhereWithoutEventsInput = {
 
 export type ArtistUpdateWithoutEventsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  stageName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stageName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileImageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pixKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isIndependent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  invitesCreated?: Prisma.InviteUpdateManyWithoutCreatedByArtistNestedInput
   user?: Prisma.UserUpdateOneWithoutArtistNestedInput
-  organization?: Prisma.OrganizationUpdateOneRequiredWithoutArtistsNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutArtistsNestedInput
+  clients?: Prisma.ClientUpdateManyWithoutArtistNestedInput
 }
 
 export type ArtistUncheckedUpdateWithoutEventsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  stageName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stageName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileImageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pixKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isIndependent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  invitesCreated?: Prisma.InviteUncheckedUpdateManyWithoutCreatedByArtistNestedInput
+  clients?: Prisma.ClientUncheckedUpdateManyWithoutArtistNestedInput
 }
 
 export type ArtistCreateManyOrganizationInput = {
   id?: string
-  name: string
-  stageName: string
+  name?: string | null
+  stageName?: string | null
   birthDate?: Date | string | null
   phone?: string | null
-  email?: string | null
+  profileImageKey?: string | null
   address?: string | null
   city?: string | null
   state?: string | null
   pixKey?: string | null
+  isIndependent?: boolean
+  role?: $Enums.Role
   userId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -885,49 +1223,59 @@ export type ArtistCreateManyOrganizationInput = {
 
 export type ArtistUpdateWithoutOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  stageName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stageName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileImageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pixKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isIndependent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  invitesCreated?: Prisma.InviteUpdateManyWithoutCreatedByArtistNestedInput
   user?: Prisma.UserUpdateOneWithoutArtistNestedInput
   events?: Prisma.EventUpdateManyWithoutArtistNestedInput
+  clients?: Prisma.ClientUpdateManyWithoutArtistNestedInput
 }
 
 export type ArtistUncheckedUpdateWithoutOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  stageName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stageName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileImageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pixKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isIndependent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  invitesCreated?: Prisma.InviteUncheckedUpdateManyWithoutCreatedByArtistNestedInput
   events?: Prisma.EventUncheckedUpdateManyWithoutArtistNestedInput
+  clients?: Prisma.ClientUncheckedUpdateManyWithoutArtistNestedInput
 }
 
 export type ArtistUncheckedUpdateManyWithoutOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  stageName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stageName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileImageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pixKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isIndependent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -939,11 +1287,15 @@ export type ArtistUncheckedUpdateManyWithoutOrganizationInput = {
  */
 
 export type ArtistCountOutputType = {
+  invitesCreated: number
   events: number
+  clients: number
 }
 
 export type ArtistCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  invitesCreated?: boolean | ArtistCountOutputTypeCountInvitesCreatedArgs
   events?: boolean | ArtistCountOutputTypeCountEventsArgs
+  clients?: boolean | ArtistCountOutputTypeCountClientsArgs
 }
 
 /**
@@ -959,8 +1311,22 @@ export type ArtistCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exten
 /**
  * ArtistCountOutputType without action
  */
+export type ArtistCountOutputTypeCountInvitesCreatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InviteWhereInput
+}
+
+/**
+ * ArtistCountOutputType without action
+ */
 export type ArtistCountOutputTypeCountEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.EventWhereInput
+}
+
+/**
+ * ArtistCountOutputType without action
+ */
+export type ArtistCountOutputTypeCountClientsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ClientWhereInput
 }
 
 
@@ -970,18 +1336,22 @@ export type ArtistSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   stageName?: boolean
   birthDate?: boolean
   phone?: boolean
-  email?: boolean
+  profileImageKey?: boolean
   address?: boolean
   city?: boolean
   state?: boolean
   pixKey?: boolean
+  isIndependent?: boolean
+  role?: boolean
   userId?: boolean
   organizationId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  invitesCreated?: boolean | Prisma.Artist$invitesCreatedArgs<ExtArgs>
   user?: boolean | Prisma.Artist$userArgs<ExtArgs>
-  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+  organization?: boolean | Prisma.Artist$organizationArgs<ExtArgs>
   events?: boolean | Prisma.Artist$eventsArgs<ExtArgs>
+  clients?: boolean | Prisma.Artist$clientsArgs<ExtArgs>
   _count?: boolean | Prisma.ArtistCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["artist"]>
 
@@ -991,17 +1361,19 @@ export type ArtistSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   stageName?: boolean
   birthDate?: boolean
   phone?: boolean
-  email?: boolean
+  profileImageKey?: boolean
   address?: boolean
   city?: boolean
   state?: boolean
   pixKey?: boolean
+  isIndependent?: boolean
+  role?: boolean
   userId?: boolean
   organizationId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.Artist$userArgs<ExtArgs>
-  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+  organization?: boolean | Prisma.Artist$organizationArgs<ExtArgs>
 }, ExtArgs["result"]["artist"]>
 
 export type ArtistSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1010,17 +1382,19 @@ export type ArtistSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   stageName?: boolean
   birthDate?: boolean
   phone?: boolean
-  email?: boolean
+  profileImageKey?: boolean
   address?: boolean
   city?: boolean
   state?: boolean
   pixKey?: boolean
+  isIndependent?: boolean
+  role?: boolean
   userId?: boolean
   organizationId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.Artist$userArgs<ExtArgs>
-  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+  organization?: boolean | Prisma.Artist$organizationArgs<ExtArgs>
 }, ExtArgs["result"]["artist"]>
 
 export type ArtistSelectScalar = {
@@ -1029,53 +1403,61 @@ export type ArtistSelectScalar = {
   stageName?: boolean
   birthDate?: boolean
   phone?: boolean
-  email?: boolean
+  profileImageKey?: boolean
   address?: boolean
   city?: boolean
   state?: boolean
   pixKey?: boolean
+  isIndependent?: boolean
+  role?: boolean
   userId?: boolean
   organizationId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ArtistOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "stageName" | "birthDate" | "phone" | "email" | "address" | "city" | "state" | "pixKey" | "userId" | "organizationId" | "createdAt" | "updatedAt", ExtArgs["result"]["artist"]>
+export type ArtistOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "stageName" | "birthDate" | "phone" | "profileImageKey" | "address" | "city" | "state" | "pixKey" | "isIndependent" | "role" | "userId" | "organizationId" | "createdAt" | "updatedAt", ExtArgs["result"]["artist"]>
 export type ArtistInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  invitesCreated?: boolean | Prisma.Artist$invitesCreatedArgs<ExtArgs>
   user?: boolean | Prisma.Artist$userArgs<ExtArgs>
-  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+  organization?: boolean | Prisma.Artist$organizationArgs<ExtArgs>
   events?: boolean | Prisma.Artist$eventsArgs<ExtArgs>
+  clients?: boolean | Prisma.Artist$clientsArgs<ExtArgs>
   _count?: boolean | Prisma.ArtistCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ArtistIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.Artist$userArgs<ExtArgs>
-  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+  organization?: boolean | Prisma.Artist$organizationArgs<ExtArgs>
 }
 export type ArtistIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.Artist$userArgs<ExtArgs>
-  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+  organization?: boolean | Prisma.Artist$organizationArgs<ExtArgs>
 }
 
 export type $ArtistPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Artist"
   objects: {
+    invitesCreated: Prisma.$InvitePayload<ExtArgs>[]
     user: Prisma.$UserPayload<ExtArgs> | null
-    organization: Prisma.$OrganizationPayload<ExtArgs>
+    organization: Prisma.$OrganizationPayload<ExtArgs> | null
     events: Prisma.$EventPayload<ExtArgs>[]
+    clients: Prisma.$ClientPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    name: string
-    stageName: string
+    name: string | null
+    stageName: string | null
     birthDate: Date | null
     phone: string | null
-    email: string | null
+    profileImageKey: string | null
     address: string | null
     city: string | null
     state: string | null
     pixKey: string | null
+    isIndependent: boolean
+    role: $Enums.Role
     userId: string | null
-    organizationId: string
+    organizationId: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["artist"]>
@@ -1472,9 +1854,11 @@ readonly fields: ArtistFieldRefs;
  */
 export interface Prisma__ArtistClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  invitesCreated<T extends Prisma.Artist$invitesCreatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Artist$invitesCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvitePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   user<T extends Prisma.Artist$userArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Artist$userArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  organization<T extends Prisma.Artist$organizationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Artist$organizationArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   events<T extends Prisma.Artist$eventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Artist$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  clients<T extends Prisma.Artist$clientsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Artist$clientsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClientPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1509,11 +1893,13 @@ export interface ArtistFieldRefs {
   readonly stageName: Prisma.FieldRef<"Artist", 'String'>
   readonly birthDate: Prisma.FieldRef<"Artist", 'DateTime'>
   readonly phone: Prisma.FieldRef<"Artist", 'String'>
-  readonly email: Prisma.FieldRef<"Artist", 'String'>
+  readonly profileImageKey: Prisma.FieldRef<"Artist", 'String'>
   readonly address: Prisma.FieldRef<"Artist", 'String'>
   readonly city: Prisma.FieldRef<"Artist", 'String'>
   readonly state: Prisma.FieldRef<"Artist", 'String'>
   readonly pixKey: Prisma.FieldRef<"Artist", 'String'>
+  readonly isIndependent: Prisma.FieldRef<"Artist", 'Boolean'>
+  readonly role: Prisma.FieldRef<"Artist", 'Role'>
   readonly userId: Prisma.FieldRef<"Artist", 'String'>
   readonly organizationId: Prisma.FieldRef<"Artist", 'String'>
   readonly createdAt: Prisma.FieldRef<"Artist", 'DateTime'>
@@ -1919,6 +2305,30 @@ export type ArtistDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
 }
 
 /**
+ * Artist.invitesCreated
+ */
+export type Artist$invitesCreatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Invite
+   */
+  select?: Prisma.InviteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Invite
+   */
+  omit?: Prisma.InviteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InviteInclude<ExtArgs> | null
+  where?: Prisma.InviteWhereInput
+  orderBy?: Prisma.InviteOrderByWithRelationInput | Prisma.InviteOrderByWithRelationInput[]
+  cursor?: Prisma.InviteWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InviteScalarFieldEnum | Prisma.InviteScalarFieldEnum[]
+}
+
+/**
  * Artist.user
  */
 export type Artist$userArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1935,6 +2345,25 @@ export type Artist$userArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
    */
   include?: Prisma.UserInclude<ExtArgs> | null
   where?: Prisma.UserWhereInput
+}
+
+/**
+ * Artist.organization
+ */
+export type Artist$organizationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Organization
+   */
+  select?: Prisma.OrganizationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Organization
+   */
+  omit?: Prisma.OrganizationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OrganizationInclude<ExtArgs> | null
+  where?: Prisma.OrganizationWhereInput
 }
 
 /**
@@ -1959,6 +2388,30 @@ export type Artist$eventsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.EventScalarFieldEnum | Prisma.EventScalarFieldEnum[]
+}
+
+/**
+ * Artist.clients
+ */
+export type Artist$clientsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Client
+   */
+  select?: Prisma.ClientSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Client
+   */
+  omit?: Prisma.ClientOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClientInclude<ExtArgs> | null
+  where?: Prisma.ClientWhereInput
+  orderBy?: Prisma.ClientOrderByWithRelationInput | Prisma.ClientOrderByWithRelationInput[]
+  cursor?: Prisma.ClientWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ClientScalarFieldEnum | Prisma.ClientScalarFieldEnum[]
 }
 
 /**

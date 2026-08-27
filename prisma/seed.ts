@@ -2,8 +2,8 @@ import 'dotenv/config';
 import * as bcrypt from 'bcrypt';
 import { PrismaPg } from '@prisma/adapter-pg';
 import {
-  AccountType,
   EventStatus,
+  InviteStatus,
   PaymentMethod,
   PrismaClient,
   Role,
@@ -20,32 +20,102 @@ const prisma = new PrismaClient({
 });
 
 const agencyDocument = 'SEED-AGENCY-0001';
-const independentDocument = 'SEED-INDEPENDENT-0001';
 const password = 'RewindJ@123';
 
 function dateAt(daysFromToday: number, hour = 20): Date {
   const date = new Date();
+
   date.setUTCHours(hour, 0, 0, 0);
   date.setUTCDate(date.getUTCDate() + daysFromToday);
+
   return date;
 }
 
-async function removeSeedOrganization(document: string) {
-  const organization = await prisma.organization.findUnique({
-    where: { document },
-    select: { id: true },
+async function removeSeedData() {
+  const agency = await prisma.organization.findUnique({
+    where: {
+      document: agencyDocument,
+    },
+    select: {
+      id: true,
+    },
   });
 
-  if (!organization) return;
+  if (agency) {
+    await prisma.$transaction([
+      prisma.event.deleteMany({
+        where: {
+          organizationId: agency.id,
+        },
+      }),
+      prisma.client.deleteMany({
+        where: {
+          organizationId: agency.id,
+        },
+      }),
+      prisma.invite.deleteMany({
+        where: {
+          organizationId: agency.id,
+        },
+      }),
+      prisma.artist.deleteMany({
+        where: {
+          organizationId: agency.id,
+        },
+      }),
+      prisma.organization.delete({
+        where: {
+          id: agency.id,
+        },
+      }),
+    ]);
+  }
 
-  await prisma.$transaction([
-    prisma.event.deleteMany({ where: { organizationId: organization.id } }),
-    prisma.invite.deleteMany({ where: { organizationId: organization.id } }),
-    prisma.client.deleteMany({ where: { organizationId: organization.id } }),
-    prisma.artist.deleteMany({ where: { organizationId: organization.id } }),
-    prisma.user.deleteMany({ where: { organizationId: organization.id } }),
-    prisma.organization.delete({ where: { id: organization.id } }),
-  ]);
+  const independentUser = await prisma.user.findUnique({
+    where: {
+      email: 'sol@rewindj.test',
+    },
+    select: {
+      id: true,
+    },
+  });
+
+  if (independentUser) {
+    const independentArtist = await prisma.artist.findUnique({
+      where: {
+        userId: independentUser.id,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (independentArtist) {
+      await prisma.$transaction([
+        prisma.event.deleteMany({
+          where: {
+            artistId: independentArtist.id,
+          },
+        }),
+        prisma.client.deleteMany({
+          where: {
+            artistId: independentArtist.id,
+          },
+        }),
+        prisma.artist.delete({
+          where: {
+            id: independentArtist.id,
+          },
+        }),
+      ]);
+    }
+
+    await prisma.user.delete({
+      where: {
+        id: independentUser.id,
+      },
+    });
+  }
 }
 
 async function createAgencyScenario(passwordHash: string) {
@@ -54,115 +124,131 @@ async function createAgencyScenario(passwordHash: string) {
       name: 'RewindJ Demo Agency',
       document: agencyDocument,
       email: 'agency@rewindj.test',
-      accountType: AccountType.AGENCY,
     },
   });
 
-  const [ceo, admin, producer, artistUserA, artistUserB, artistUserC] =
-    await prisma.$transaction([
-      prisma.user.create({
-        data: {
-          name: 'Carla CEO',
-          email: 'ceo@rewindj.test',
-          phone: '+5511999000001',
-          password: passwordHash,
-          role: Role.CEO,
-          organizationId: agency.id,
-        },
-      }),
-      prisma.user.create({
-        data: {
-          name: 'André Admin',
-          email: 'admin@rewindj.test',
-          phone: '+5511999000002',
-          password: passwordHash,
-          role: Role.ADMIN,
-          organizationId: agency.id,
-        },
-      }),
-      prisma.user.create({
-        data: {
-          name: 'Paula Producer',
-          email: 'producer@rewindj.test',
-          phone: '+5511999000003',
-          password: passwordHash,
-          role: Role.PRODUCER,
-          organizationId: agency.id,
-        },
-      }),
-      prisma.user.create({
-        data: {
-          name: 'Marina Costa',
-          email: 'marina@rewindj.test',
-          phone: '+5511999000011',
-          password: passwordHash,
-          role: Role.ARTIST,
-          organizationId: agency.id,
-        },
-      }),
-      prisma.user.create({
-        data: {
-          name: 'Lucas Mendes',
-          email: 'lucas@rewindj.test',
-          phone: '+5511999000012',
-          password: passwordHash,
-          role: Role.ARTIST,
-          organizationId: agency.id,
-        },
-      }),
-      prisma.user.create({
-        data: {
-          name: 'Rafa Nunes',
-          email: 'rafa@rewindj.test',
-          phone: '+5511999000013',
-          password: passwordHash,
-          role: Role.ARTIST,
-          organizationId: agency.id,
-        },
-      }),
-    ]);
+  const ceoUser = await prisma.user.create({
+    data: {
+      email: 'ceo@rewindj.test',
+      password: passwordHash,
+    },
+  });
 
-  const [marina, lucas, rafa] = await prisma.$transaction([
-    prisma.artist.create({
-      data: {
-        name: artistUserA.name,
-        stageName: 'DJ Marina',
-        email: artistUserA.email,
-        phone: artistUserA.phone,
-        city: 'São Paulo',
-        state: 'SP',
-        pixKey: 'marina@rewindj.test',
-        userId: artistUserA.id,
-        organizationId: agency.id,
-      },
-    }),
-    prisma.artist.create({
-      data: {
-        name: artistUserB.name,
-        stageName: 'DJ Lucas M',
-        email: artistUserB.email,
-        phone: artistUserB.phone,
-        city: 'São Paulo',
-        state: 'SP',
-        pixKey: 'lucas@rewindj.test',
-        userId: artistUserB.id,
-        organizationId: agency.id,
-      },
-    }),
-    prisma.artist.create({
-      data: {
-        name: artistUserC.name,
-        stageName: 'DJ Rafa Nunes',
-        email: artistUserC.email,
-        phone: artistUserC.phone,
-        city: 'Campinas',
-        state: 'SP',
-        pixKey: 'rafa@rewindj.test',
-        userId: artistUserC.id,
-        organizationId: agency.id,
-      },
-    }),
-  ]);
+  const adminUser = await prisma.user.create({
+    data: {
+      email: 'admin@rewindj.test',
+      password: passwordHash,
+    },
+  });
+
+  const producerUser = await prisma.user.create({
+    data: {
+      email: 'producer@rewindj.test',
+      password: passwordHash,
+    },
+  });
+
+  const marinaUser = await prisma.user.create({
+    data: {
+      email: 'marina@rewindj.test',
+      password: passwordHash,
+    },
+  });
+
+  const lucasUser = await prisma.user.create({
+    data: {
+      email: 'lucas@rewindj.test',
+      password: passwordHash,
+    },
+  });
+
+  const rafaUser = await prisma.user.create({
+    data: {
+      email: 'rafa@rewindj.test',
+      password: passwordHash,
+    },
+  });
+
+  const carla = await prisma.artist.create({
+    data: {
+      name: 'Carla CEO',
+      stageName: 'Carla CEO',
+      phone: '+5511999000001',
+      role: Role.CEO,
+      isIndependent: false,
+      userId: ceoUser.id,
+      organizationId: agency.id,
+    },
+  });
+
+  const andre = await prisma.artist.create({
+    data: {
+      name: 'André Admin',
+      stageName: 'André Admin',
+      phone: '+5511999000002',
+      role: Role.ADMIN,
+      isIndependent: false,
+      userId: adminUser.id,
+      organizationId: agency.id,
+    },
+  });
+
+  const paula = await prisma.artist.create({
+    data: {
+      name: 'Paula Producer',
+      stageName: 'Paula Producer',
+      phone: '+5511999000003',
+      role: Role.PRODUCER,
+      isIndependent: false,
+      userId: producerUser.id,
+      organizationId: agency.id,
+    },
+  });
+
+  const marina = await prisma.artist.create({
+    data: {
+      name: 'Marina Costa',
+      stageName: 'DJ Marina',
+      phone: '+5511999000011',
+      city: 'São Paulo',
+      state: 'SP',
+      pixKey: 'marina@rewindj.test',
+      role: Role.ARTIST,
+      isIndependent: false,
+      userId: marinaUser.id,
+      organizationId: agency.id,
+    },
+  });
+
+  const lucas = await prisma.artist.create({
+    data: {
+      name: 'Lucas Mendes',
+      stageName: 'DJ Lucas M',
+      phone: '+5511999000012',
+      city: 'São Paulo',
+      state: 'SP',
+      pixKey: 'lucas@rewindj.test',
+      role: Role.ARTIST,
+      isIndependent: false,
+      userId: lucasUser.id,
+      organizationId: agency.id,
+    },
+  });
+
+  const rafa = await prisma.artist.create({
+    data: {
+      name: 'Rafa Nunes',
+      stageName: 'DJ Rafa Nunes',
+      phone: '+5511999000013',
+      city: 'Campinas',
+      state: 'SP',
+      pixKey: 'rafa@rewindj.test',
+      role: Role.ARTIST,
+      isIndependent: false,
+      userId: rafaUser.id,
+      organizationId: agency.id,
+    },
+  });
 
   const [sunset, aurora, casa] = await prisma.$transaction([
     prisma.client.create({
@@ -174,6 +260,7 @@ async function createAgencyScenario(passwordHash: string) {
         organizationId: agency.id,
       },
     }),
+
     prisma.client.create({
       data: {
         name: 'Festival Aurora',
@@ -183,6 +270,7 @@ async function createAgencyScenario(passwordHash: string) {
         organizationId: agency.id,
       },
     }),
+
     prisma.client.create({
       data: {
         name: 'Casa 88',
@@ -210,11 +298,12 @@ async function createAgencyScenario(passwordHash: string) {
         paymentDate: dateAt(3, 12),
         paymentMethod: PaymentMethod.PIX,
         hasContract: true,
-        notes: 'Evento confirmado para validar dashboard e financeiro.',
+        notes: 'Evento da Marina.',
         artistId: marina.id,
         clientId: sunset.id,
         organizationId: agency.id,
       },
+
       {
         title: 'Aurora Open Air',
         eventDate: dateAt(18),
@@ -229,11 +318,12 @@ async function createAgencyScenario(passwordHash: string) {
         fee: 4800,
         paymentMethod: PaymentMethod.DEPOSIT,
         hasContract: false,
-        notes: 'Aguardando aprovação do contrato.',
+        notes: 'Evento da Marina.',
         artistId: marina.id,
         clientId: aurora.id,
         organizationId: agency.id,
       },
+
       {
         title: 'Casa 88 - Sexta',
         eventDate: dateAt(-12),
@@ -249,11 +339,12 @@ async function createAgencyScenario(passwordHash: string) {
         paymentDate: dateAt(-4, 12),
         paymentMethod: PaymentMethod.CASH,
         hasContract: true,
-        notes: 'Evento passado pago.',
+        notes: 'Evento passado do Lucas.',
         artistId: lucas.id,
         clientId: casa.id,
         organizationId: agency.id,
       },
+
       {
         title: 'Festival Aurora - Main Stage',
         eventDate: dateAt(25),
@@ -269,11 +360,12 @@ async function createAgencyScenario(passwordHash: string) {
         paymentDate: dateAt(20, 12),
         paymentMethod: PaymentMethod.INVOICE,
         hasContract: true,
-        notes: 'Evento futuro do Lucas para validar isolamento entre artistas.',
+        notes: 'Evento futuro do Lucas.',
         artistId: lucas.id,
         clientId: aurora.id,
         organizationId: agency.id,
       },
+
       {
         title: 'Sunset Club - Teste de Agenda',
         eventDate: dateAt(10),
@@ -288,7 +380,7 @@ async function createAgencyScenario(passwordHash: string) {
         fee: 2200,
         paymentMethod: PaymentMethod.OTHER,
         hasContract: false,
-        notes: 'Proposta perdida para testar status LOST.',
+        notes: 'Proposta perdida do Rafa.',
         artistId: rafa.id,
         clientId: sunset.id,
         organizationId: agency.id,
@@ -296,41 +388,56 @@ async function createAgencyScenario(passwordHash: string) {
     ],
   });
 
-  return { agency, ceo, admin, producer, marina, lucas, rafa };
-}
-
-async function createIndependentScenario(passwordHash: string) {
-  const organization = await prisma.organization.create({
+  await prisma.invite.create({
     data: {
-      name: 'DJ Sol Independente',
-      document: independentDocument,
-      email: 'sol@rewindj.test',
-      accountType: AccountType.INDEPENDENT_ARTIST,
+      email: 'novoartista@rewindj.test',
+      role: Role.ARTIST,
+      token: `seed-${Date.now()}`,
+      status: InviteStatus.PENDING,
+      organizationId: agency.id,
+      createdById: ceoUser.id,
+      createdByArtistId: carla.id,
+      expiresAt: dateAt(1),
     },
   });
 
+  return {
+    agency,
+    ceoUser,
+    adminUser,
+    producerUser,
+    marinaUser,
+    lucasUser,
+    rafaUser,
+    carla,
+    andre,
+    paula,
+    marina,
+    lucas,
+    rafa,
+  };
+}
+
+async function createIndependentScenario(passwordHash: string) {
   const user = await prisma.user.create({
     data: {
-      name: 'Sofia Almeida',
       email: 'sol@rewindj.test',
-      phone: '+5521999000021',
       password: passwordHash,
-      role: Role.ARTIST,
-      organizationId: organization.id,
     },
   });
 
   const artist = await prisma.artist.create({
     data: {
-      name: user.name,
+      name: 'Sofia Almeida',
       stageName: 'DJ Sol',
-      email: user.email,
-      phone: user.phone,
+      phone: '+5521999000021',
       city: 'Rio de Janeiro',
       state: 'RJ',
       pixKey: 'sol@rewindj.test',
+      role: Role.ARTIST,
+      isIndependent: true,
       userId: user.id,
-      organizationId: organization.id,
+      organizationId: null,
     },
   });
 
@@ -340,15 +447,18 @@ async function createIndependentScenario(passwordHash: string) {
         name: 'Marina da Barra',
         email: 'agenda@marinadabarra.test',
         phone: '+5521988110021',
-        organizationId: organization.id,
+        artistId: artist.id,
+        organizationId: null,
       },
     }),
+
     prisma.client.create({
       data: {
         name: 'Casamento Camila & João',
         email: 'camila@casamento.test',
         phone: '+5521988110022',
-        organizationId: organization.id,
+        artistId: artist.id,
+        organizationId: null,
       },
     }),
   ]);
@@ -373,8 +483,9 @@ async function createIndependentScenario(passwordHash: string) {
         notes: 'Evento independente confirmado.',
         artistId: artist.id,
         clientId: marinaDaBarra.id,
-        organizationId: organization.id,
+        organizationId: null,
       },
+
       {
         title: 'Casamento Camila & João',
         eventDate: dateAt(30),
@@ -392,32 +503,49 @@ async function createIndependentScenario(passwordHash: string) {
         notes: 'Proposta enviada; aguardando retorno.',
         artistId: artist.id,
         clientId: wedding.id,
-        organizationId: organization.id,
+        organizationId: null,
       },
     ],
   });
 
-  return { organization, user, artist };
+  return {
+    user,
+    artist,
+  };
 }
 
 async function main() {
-  await removeSeedOrganization(agencyDocument);
-  await removeSeedOrganization(independentDocument);
+  await removeSeedData();
 
   const passwordHash = await bcrypt.hash(password, 10);
+
   const agency = await createAgencyScenario(passwordHash);
   const independent = await createIndependentScenario(passwordHash);
 
   console.log('Seed concluído.');
   console.log(`Senha de todas as contas: ${password}`);
-  console.log(`Agência: ${agency.agency.name}`);
-  console.log(
-    'Contas: ceo@rewindj.test, admin@rewindj.test, producer@rewindj.test',
-  );
-  console.log(
-    'Artistas da agência: marina@rewindj.test, lucas@rewindj.test, rafa@rewindj.test',
-  );
-  console.log(`Artista independente: ${independent.user.email}`);
+
+  console.log('');
+  console.log('=== AGÊNCIA ===');
+  console.log('CEO: ceo@rewindj.test');
+  console.log('Admin: admin@rewindj.test');
+  console.log('Producer: producer@rewindj.test');
+  console.log('Artista Marina: marina@rewindj.test');
+  console.log('Artista Lucas: lucas@rewindj.test');
+  console.log('Artista Rafa: rafa@rewindj.test');
+
+  console.log('');
+  console.log('=== ARTISTA INDEPENDENTE ===');
+  console.log('Sofia: sol@rewindj.test');
+
+  console.log('');
+  console.log('=== INVITE ===');
+  console.log('Email: novoartista@rewindj.test');
+
+  console.log('');
+  console.log(`Agency ID: ${agency.agency.id}`);
+  console.log(`CEO Artist ID: ${agency.carla.id}`);
+  console.log(`Independent Artist ID: ${independent.artist.id}`);
 }
 
 main()

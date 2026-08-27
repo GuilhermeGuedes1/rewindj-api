@@ -52,8 +52,8 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   Organization: 'Organization',
-  User: 'User',
   Invite: 'Invite',
+  User: 'User',
   Artist: 'Artist',
   Client: 'Client',
   Event: 'Event'
@@ -88,22 +88,6 @@ export const OrganizationScalarFieldEnum = {
 export type OrganizationScalarFieldEnum = (typeof OrganizationScalarFieldEnum)[keyof typeof OrganizationScalarFieldEnum]
 
 
-export const UserScalarFieldEnum = {
-  id: 'id',
-  email: 'email',
-  password: 'password',
-  name: 'name',
-  phone: 'phone',
-  profileImageKey: 'profileImageKey',
-  role: 'role',
-  organizationId: 'organizationId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
-
-
 export const InviteScalarFieldEnum = {
   id: 'id',
   email: 'email',
@@ -112,6 +96,7 @@ export const InviteScalarFieldEnum = {
   status: 'status',
   organizationId: 'organizationId',
   createdById: 'createdById',
+  createdByArtistId: 'createdByArtistId',
   expiresAt: 'expiresAt',
   acceptedAt: 'acceptedAt',
   createdAt: 'createdAt',
@@ -121,17 +106,30 @@ export const InviteScalarFieldEnum = {
 export type InviteScalarFieldEnum = (typeof InviteScalarFieldEnum)[keyof typeof InviteScalarFieldEnum]
 
 
+export const UserScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  password: 'password',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
 export const ArtistScalarFieldEnum = {
   id: 'id',
   name: 'name',
   stageName: 'stageName',
   birthDate: 'birthDate',
   phone: 'phone',
-  email: 'email',
+  profileImageKey: 'profileImageKey',
   address: 'address',
   city: 'city',
   state: 'state',
   pixKey: 'pixKey',
+  isIndependent: 'isIndependent',
+  role: 'role',
   userId: 'userId',
   organizationId: 'organizationId',
   createdAt: 'createdAt',
@@ -148,6 +146,7 @@ export const ClientScalarFieldEnum = {
   phone: 'phone',
   email: 'email',
   organizationId: 'organizationId',
+  artistId: 'artistId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

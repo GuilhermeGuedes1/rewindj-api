@@ -87,8 +87,9 @@ export class CreateEventDto {
     example: 'c4c49f6c-0b0c-4e7f-a92f-1c8d7c6b9d8e',
     description: 'Identifier of the artist assigned to perform at the event.',
   })
+  @IsOptional()
   @IsUUID()
-  artistId!: string;
+  artistId?: string;
 
   @ApiPropertyOptional({
     example: 'c4c49f6c-0b0c-4e7f-a92f-1c8d7c6b9d8e',

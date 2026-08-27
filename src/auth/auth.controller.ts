@@ -6,9 +6,6 @@ import {
   UseGuards,
   Req,
   Res,
-  Patch,
-  UseInterceptors,
-  UploadedFile,
 } from '@nestjs/common';
 
 import { AuthGuard as PassportAuthGuard } from '@nestjs/passport';
@@ -20,7 +17,7 @@ import { AuthGuard } from './guards/auth.guards';
 import { CurrentUser } from './decorators/user.decorator';
 import { CurrentUserDto } from './dtos/user.dto';
 import { UserResponseDto } from './dtos/users-response.dto';
-import { UpdateMeDto } from './dtos/update-me.dto';
+
 import {
   ApiBearerAuth,
   ApiBody,
@@ -37,7 +34,6 @@ import {
   RegisterResponseDto,
 } from './dtos/auth-response.dto';
 import { MeResponseDto } from './dtos/me-response.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
 
 type GoogleOAuthUser = {
   email?: string;
@@ -68,13 +64,9 @@ export class AuthController {
     description:
       'User, organization email, or organization document already exists.',
   })
-  @UseInterceptors(FileInterceptor('cover'))
   @Post('register')
-  async register(
-    @Body() body: RegisterDto,
-    @UploadedFile() file: Express.Multer.File,
-  ) {
-    const user = await this.authService.register(body, file);
+  async register(@Body() body: RegisterDto) {
+    const user = await this.authService.register(body);
 
     return {
       message: 'User registered successfully',
@@ -132,22 +124,6 @@ export class AuthController {
   @Get('users')
   getUsers(@CurrentUser() user: CurrentUserDto) {
     return this.authService.getUsers(user);
-  }
-
-  @ApiBearerAuth()
-  @ApiOperation({
-    summary: 'Update authenticated user account',
-    description: 'Updates basic account data for the authenticated user.',
-  })
-  @ApiOkResponse({
-    description: 'User account updated successfully.',
-    type: UserResponseDto,
-  })
-  @ApiUnauthorizedResponse({ description: 'Missing or invalid bearer token.' })
-  @UseGuards(AuthGuard)
-  @Patch('me')
-  updateMe(@CurrentUser() user: CurrentUserDto, @Body() body: UpdateMeDto) {
-    return this.authService.updateMe(user, body);
   }
 
   @Get('google')

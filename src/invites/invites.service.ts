@@ -7,6 +7,7 @@ import {
   BadRequestException,
   NotFoundException,
   ConflictException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InviteStatus } from '../generated/prisma/client';
 import { AcceptInviteDto } from './dtos/accept-invite.dto';
@@ -18,7 +19,19 @@ export class InvitesService {
   constructor(private readonly prisma: PrismaService) {}
 
   async createInvite(user: CurrentUserDto, data: CreateInviteDto) {
+    if (!user.organizationId) {
+      throw new UnauthorizedException('User has no organization');
+    }
     ensureCanManageOrganization(user);
+
+    const creator = await this.prisma.artist.findUnique({
+      where: { userId: user.sub },
+      select: { id: true },
+    });
+
+    if (!creator) {
+      throw new BadRequestException('Authenticated user has no artist profile');
+    }
 
     const token = randomUUID();
 
@@ -33,6 +46,7 @@ export class InvitesService {
         token,
         organizationId: user.organizationId,
         createdById: user.sub,
+        createdByArtistId: creator.id,
         expiresAt,
       },
     });
@@ -95,9 +109,9 @@ export class InvitesService {
       throw new BadRequestException('Invite expired');
     }
 
-    const userAlreadyExists = await this.prisma.user.findFirst({
+    const userAlreadyExists = await this.prisma.user.findUnique({
       where: {
-        OR: [{ email: invite.email }, { phone: data.phone }],
+        email: invite.email,
       },
     });
 
@@ -110,32 +124,22 @@ export class InvitesService {
     await this.prisma.$transaction(async (tx) => {
       const createdUser = await tx.user.create({
         data: {
-          name: data.name,
           email: invite.email,
-          phone: data.phone,
           password: passwordHash,
-          role: invite.role,
-          organizationId: invite.organizationId,
         },
       });
 
-      if (invite.role === 'ARTIST') {
-        await tx.artist.create({
-          data: {
-            name: data.name,
-            stageName: data.stageName || data.name,
-            birthDate: data.birthDate ? new Date(data.birthDate) : null,
-            phone: data.phone,
-            email: invite.email,
-            address: data.address,
-            city: data.city,
-            state: data.state,
-            pixKey: data.pixKey,
-            organizationId: invite.organizationId,
-            userId: createdUser.id,
-          },
-        });
-      }
+      await tx.artist.create({
+        data: {
+          name: data.name,
+          stageName: data.name,
+          phone: data.phone,
+          role: invite.role,
+          isIndependent: false,
+          organizationId: invite.organizationId,
+          userId: createdUser.id,
+        },
+      });
 
       await tx.invite.update({
         where: { id: invite.id },

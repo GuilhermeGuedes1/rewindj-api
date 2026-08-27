@@ -2,6 +2,7 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CurrentUserDto } from '../auth/dtos/user.dto';
@@ -48,6 +49,9 @@ export class ArtistsService {
   }
 
   async getEvents(user: CurrentUserDto) {
+    if (!user.organizationId) {
+      throw new UnauthorizedException('User has no organization');
+    }
     const artist = await this.prisma.artist.findUnique({
       where: {
         userId: user.sub,
@@ -78,7 +82,6 @@ export class ArtistsService {
             id: true,
             name: true,
             stageName: true,
-            email: true,
             phone: true,
           },
         },
@@ -154,16 +157,6 @@ export class ArtistsService {
       throw new ConflictException('User already exists');
     }
 
-    const existingArtist = await this.prisma.artist.findUnique({
-      where: {
-        email: body.email,
-      },
-    });
-
-    if (existingArtist) {
-      throw new ConflictException('Artist already exists');
-    }
-
     const passwordHashed = await bcrypt.hash(body.password, 10);
 
     const result = await this.prisma.$transaction(async (tx) => {
@@ -178,12 +171,8 @@ export class ArtistsService {
 
       const createdUser = await tx.user.create({
         data: {
-          name: body.name,
           email: body.email,
           password: passwordHashed,
-          phone: body.phone,
-          role: Role.ARTIST,
-          organizationId: organization.id,
         },
       });
 
@@ -193,13 +182,14 @@ export class ArtistsService {
           stageName: body.stageName || body.name,
           birthDate: body.birthDate ? new Date(body.birthDate) : null,
           phone: body.phone,
-          email: body.email,
           address: body.address,
           city: body.city,
           state: body.state,
           pixKey: body.pixKey,
+          role: Role.ARTIST,
+          isIndependent: true,
           userId: createdUser.id,
-          organizationId: organization.id,
+          organizationId: null,
         },
       });
 
@@ -214,10 +204,7 @@ export class ArtistsService {
       message: 'Account created successfully',
       user: {
         id: result.user.id,
-        name: result.user.name,
         email: result.user.email,
-        role: result.user.role,
-        organizationId: result.user.organizationId,
       },
       artist: new ArtistResponseDto(result.artist),
     };

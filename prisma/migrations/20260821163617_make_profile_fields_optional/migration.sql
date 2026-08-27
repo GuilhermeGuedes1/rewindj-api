@@ -1,0 +1,6 @@
+-- AlterTable
+ALTER TABLE "Artist" ALTER COLUMN "name" DROP NOT NULL,
+ALTER COLUMN "stageName" DROP NOT NULL;
+
+-- AlterTable
+ALTER TABLE "User" ALTER COLUMN "password" DROP NOT NULL;

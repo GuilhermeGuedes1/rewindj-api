@@ -294,7 +294,7 @@ export type EventGroupByOutputType = {
   notes: string | null
   artistId: string | null
   clientId: string | null
-  organizationId: string
+  organizationId: string | null
   createdAt: Date
   updatedAt: Date
   _count: EventCountAggregateOutputType | null
@@ -341,12 +341,12 @@ export type EventWhereInput = {
   notes?: Prisma.StringNullableFilter<"Event"> | string | null
   artistId?: Prisma.StringNullableFilter<"Event"> | string | null
   clientId?: Prisma.StringNullableFilter<"Event"> | string | null
-  organizationId?: Prisma.StringFilter<"Event"> | string
+  organizationId?: Prisma.StringNullableFilter<"Event"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   artist?: Prisma.XOR<Prisma.ArtistNullableScalarRelationFilter, Prisma.ArtistWhereInput> | null
   client?: Prisma.XOR<Prisma.ClientNullableScalarRelationFilter, Prisma.ClientWhereInput> | null
-  organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
+  organization?: Prisma.XOR<Prisma.OrganizationNullableScalarRelationFilter, Prisma.OrganizationWhereInput> | null
 }
 
 export type EventOrderByWithRelationInput = {
@@ -368,7 +368,7 @@ export type EventOrderByWithRelationInput = {
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   artistId?: Prisma.SortOrderInput | Prisma.SortOrder
   clientId?: Prisma.SortOrderInput | Prisma.SortOrder
-  organizationId?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   artist?: Prisma.ArtistOrderByWithRelationInput
@@ -399,12 +399,12 @@ export type EventWhereUniqueInput = Prisma.AtLeast<{
   notes?: Prisma.StringNullableFilter<"Event"> | string | null
   artistId?: Prisma.StringNullableFilter<"Event"> | string | null
   clientId?: Prisma.StringNullableFilter<"Event"> | string | null
-  organizationId?: Prisma.StringFilter<"Event"> | string
+  organizationId?: Prisma.StringNullableFilter<"Event"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   artist?: Prisma.XOR<Prisma.ArtistNullableScalarRelationFilter, Prisma.ArtistWhereInput> | null
   client?: Prisma.XOR<Prisma.ClientNullableScalarRelationFilter, Prisma.ClientWhereInput> | null
-  organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
+  organization?: Prisma.XOR<Prisma.OrganizationNullableScalarRelationFilter, Prisma.OrganizationWhereInput> | null
 }, "id" | "organizationId_artistId_eventDate_title">
 
 export type EventOrderByWithAggregationInput = {
@@ -426,7 +426,7 @@ export type EventOrderByWithAggregationInput = {
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   artistId?: Prisma.SortOrderInput | Prisma.SortOrder
   clientId?: Prisma.SortOrderInput | Prisma.SortOrder
-  organizationId?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.EventCountOrderByAggregateInput
@@ -458,7 +458,7 @@ export type EventScalarWhereWithAggregatesInput = {
   notes?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
   artistId?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
   clientId?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
-  organizationId?: Prisma.StringWithAggregatesFilter<"Event"> | string
+  organizationId?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Event"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Event"> | Date | string
 }
@@ -484,7 +484,7 @@ export type EventCreateInput = {
   updatedAt?: Date | string
   artist?: Prisma.ArtistCreateNestedOneWithoutEventsInput
   client?: Prisma.ClientCreateNestedOneWithoutEventsInput
-  organization: Prisma.OrganizationCreateNestedOneWithoutEventsInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutEventsInput
 }
 
 export type EventUncheckedCreateInput = {
@@ -506,7 +506,7 @@ export type EventUncheckedCreateInput = {
   notes?: string | null
   artistId?: string | null
   clientId?: string | null
-  organizationId: string
+  organizationId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -532,7 +532,7 @@ export type EventUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   artist?: Prisma.ArtistUpdateOneWithoutEventsNestedInput
   client?: Prisma.ClientUpdateOneWithoutEventsNestedInput
-  organization?: Prisma.OrganizationUpdateOneRequiredWithoutEventsNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutEventsNestedInput
 }
 
 export type EventUncheckedUpdateInput = {
@@ -554,7 +554,7 @@ export type EventUncheckedUpdateInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   artistId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -578,7 +578,7 @@ export type EventCreateManyInput = {
   notes?: string | null
   artistId?: string | null
   clientId?: string | null
-  organizationId: string
+  organizationId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -623,7 +623,7 @@ export type EventUncheckedUpdateManyInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   artistId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -867,10 +867,6 @@ export type NullableEnumPaymentMethodFieldUpdateOperationsInput = {
   set?: $Enums.PaymentMethod | null
 }
 
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
-}
-
 export type EventCreateWithoutOrganizationInput = {
   id?: string
   title: string
@@ -965,7 +961,7 @@ export type EventScalarWhereInput = {
   notes?: Prisma.StringNullableFilter<"Event"> | string | null
   artistId?: Prisma.StringNullableFilter<"Event"> | string | null
   clientId?: Prisma.StringNullableFilter<"Event"> | string | null
-  organizationId?: Prisma.StringFilter<"Event"> | string
+  organizationId?: Prisma.StringNullableFilter<"Event"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Event"> | Date | string
 }
@@ -990,7 +986,7 @@ export type EventCreateWithoutArtistInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   client?: Prisma.ClientCreateNestedOneWithoutEventsInput
-  organization: Prisma.OrganizationCreateNestedOneWithoutEventsInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutEventsInput
 }
 
 export type EventUncheckedCreateWithoutArtistInput = {
@@ -1011,7 +1007,7 @@ export type EventUncheckedCreateWithoutArtistInput = {
   hasContract?: boolean
   notes?: string | null
   clientId?: string | null
-  organizationId: string
+  organizationId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1062,7 +1058,7 @@ export type EventCreateWithoutClientInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   artist?: Prisma.ArtistCreateNestedOneWithoutEventsInput
-  organization: Prisma.OrganizationCreateNestedOneWithoutEventsInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutEventsInput
 }
 
 export type EventUncheckedCreateWithoutClientInput = {
@@ -1083,7 +1079,7 @@ export type EventUncheckedCreateWithoutClientInput = {
   hasContract?: boolean
   notes?: string | null
   artistId?: string | null
-  organizationId: string
+  organizationId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1224,7 +1220,7 @@ export type EventCreateManyArtistInput = {
   hasContract?: boolean
   notes?: string | null
   clientId?: string | null
-  organizationId: string
+  organizationId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1249,7 +1245,7 @@ export type EventUpdateWithoutArtistInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   client?: Prisma.ClientUpdateOneWithoutEventsNestedInput
-  organization?: Prisma.OrganizationUpdateOneRequiredWithoutEventsNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutEventsNestedInput
 }
 
 export type EventUncheckedUpdateWithoutArtistInput = {
@@ -1270,7 +1266,7 @@ export type EventUncheckedUpdateWithoutArtistInput = {
   hasContract?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1293,7 +1289,7 @@ export type EventUncheckedUpdateManyWithoutArtistInput = {
   hasContract?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1316,7 +1312,7 @@ export type EventCreateManyClientInput = {
   hasContract?: boolean
   notes?: string | null
   artistId?: string | null
-  organizationId: string
+  organizationId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1341,7 +1337,7 @@ export type EventUpdateWithoutClientInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   artist?: Prisma.ArtistUpdateOneWithoutEventsNestedInput
-  organization?: Prisma.OrganizationUpdateOneRequiredWithoutEventsNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutEventsNestedInput
 }
 
 export type EventUncheckedUpdateWithoutClientInput = {
@@ -1362,7 +1358,7 @@ export type EventUncheckedUpdateWithoutClientInput = {
   hasContract?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   artistId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1385,7 +1381,7 @@ export type EventUncheckedUpdateManyWithoutClientInput = {
   hasContract?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   artistId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1416,7 +1412,7 @@ export type EventSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   updatedAt?: boolean
   artist?: boolean | Prisma.Event$artistArgs<ExtArgs>
   client?: boolean | Prisma.Event$clientArgs<ExtArgs>
-  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+  organization?: boolean | Prisma.Event$organizationArgs<ExtArgs>
 }, ExtArgs["result"]["event"]>
 
 export type EventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1443,7 +1439,7 @@ export type EventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   updatedAt?: boolean
   artist?: boolean | Prisma.Event$artistArgs<ExtArgs>
   client?: boolean | Prisma.Event$clientArgs<ExtArgs>
-  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+  organization?: boolean | Prisma.Event$organizationArgs<ExtArgs>
 }, ExtArgs["result"]["event"]>
 
 export type EventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1470,7 +1466,7 @@ export type EventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   updatedAt?: boolean
   artist?: boolean | Prisma.Event$artistArgs<ExtArgs>
   client?: boolean | Prisma.Event$clientArgs<ExtArgs>
-  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+  organization?: boolean | Prisma.Event$organizationArgs<ExtArgs>
 }, ExtArgs["result"]["event"]>
 
 export type EventSelectScalar = {
@@ -1501,17 +1497,17 @@ export type EventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
 export type EventInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   artist?: boolean | Prisma.Event$artistArgs<ExtArgs>
   client?: boolean | Prisma.Event$clientArgs<ExtArgs>
-  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+  organization?: boolean | Prisma.Event$organizationArgs<ExtArgs>
 }
 export type EventIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   artist?: boolean | Prisma.Event$artistArgs<ExtArgs>
   client?: boolean | Prisma.Event$clientArgs<ExtArgs>
-  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+  organization?: boolean | Prisma.Event$organizationArgs<ExtArgs>
 }
 export type EventIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   artist?: boolean | Prisma.Event$artistArgs<ExtArgs>
   client?: boolean | Prisma.Event$clientArgs<ExtArgs>
-  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+  organization?: boolean | Prisma.Event$organizationArgs<ExtArgs>
 }
 
 export type $EventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1519,7 +1515,7 @@ export type $EventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   objects: {
     artist: Prisma.$ArtistPayload<ExtArgs> | null
     client: Prisma.$ClientPayload<ExtArgs> | null
-    organization: Prisma.$OrganizationPayload<ExtArgs>
+    organization: Prisma.$OrganizationPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1540,7 +1536,7 @@ export type $EventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     notes: string | null
     artistId: string | null
     clientId: string | null
-    organizationId: string
+    organizationId: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["event"]>
@@ -1939,7 +1935,7 @@ export interface Prisma__EventClient<T, Null = never, ExtArgs extends runtime.Ty
   readonly [Symbol.toStringTag]: "PrismaPromise"
   artist<T extends Prisma.Event$artistArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Event$artistArgs<ExtArgs>>): Prisma.Prisma__ArtistClient<runtime.Types.Result.GetResult<Prisma.$ArtistPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   client<T extends Prisma.Event$clientArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Event$clientArgs<ExtArgs>>): Prisma.Prisma__ClientClient<runtime.Types.Result.GetResult<Prisma.$ClientPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  organization<T extends Prisma.Event$organizationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Event$organizationArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2426,6 +2422,25 @@ export type Event$clientArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    */
   include?: Prisma.ClientInclude<ExtArgs> | null
   where?: Prisma.ClientWhereInput
+}
+
+/**
+ * Event.organization
+ */
+export type Event$organizationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Organization
+   */
+  select?: Prisma.OrganizationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Organization
+   */
+  omit?: Prisma.OrganizationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OrganizationInclude<ExtArgs> | null
+  where?: Prisma.OrganizationWhereInput
 }
 
 /**
