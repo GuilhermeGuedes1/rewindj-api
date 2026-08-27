@@ -28,11 +28,11 @@ export class StorageService {
 
   async uploadFile(
     bucketName: string,
-    fileKey: string,
     fileContent: Buffer,
     contentType: string,
   ) {
-    const key = `users/${uuidv4()}-${fileKey}`;
+    const extension = contentType.split('/')[1];
+    const key = `artists/profile-images/${uuidv4()}.${extension}`;
 
     const command = new PutObjectCommand({
       Bucket: bucketName,

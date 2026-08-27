@@ -1,14 +1,18 @@
 import {
   Body,
   Controller,
+  FileTypeValidator,
   Get,
+  MaxFileSizeValidator,
   Param,
+  ParseFilePipe,
   Patch,
   Post,
   UploadedFile,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
+
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from 'src/auth/guards/auth.guards';
 import { CurrentUserDto } from '../auth/dtos/user.dto';
@@ -100,7 +104,19 @@ export class ArtistsController {
   @UseGuards(AuthGuard)
   @UseInterceptors(FileInterceptor('profileImage'))
   updateProfileImage(
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new FileTypeValidator({
+            fileType: /^image\/(jpeg|png|webp)$/,
+          }),
+          new MaxFileSizeValidator({
+            maxSize: 5 * 1024 * 1024,
+          }),
+        ],
+      }),
+    )
+    file: Express.Multer.File,
     @CurrentUser() user: CurrentUserDto,
   ) {
     return this.artistsService.updateProfileImage(file, user);

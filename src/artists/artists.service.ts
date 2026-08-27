@@ -183,7 +183,6 @@ export class ArtistsService {
 
     const key = await this.storageService.uploadFile(
       process.env.AWS_BUCKET_NAME!,
-      file.originalname,
       file.buffer,
       file.mimetype,
     );
