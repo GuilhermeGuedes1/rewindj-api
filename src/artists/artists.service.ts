@@ -3,6 +3,7 @@ import {
   Injectable,
   NotFoundException,
   UnauthorizedException,
+  BadRequestException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CurrentUserDto } from '../auth/dtos/user.dto';
@@ -15,6 +16,7 @@ import { Role } from 'src/generated/prisma/enums';
 import { randomUUID } from 'crypto';
 import { ensureCanManageOrganization } from 'src/auth/organization-authorization';
 import { StorageService } from 'src/storage/storage.service';
+import sharp from 'sharp';
 
 @Injectable()
 export class ArtistsService {
@@ -181,10 +183,23 @@ export class ArtistsService {
       throw new NotFoundException('Artist profile not found');
     }
 
+    let imageBuffer: Buffer;
+
+    try {
+      imageBuffer = await sharp(file.buffer)
+        .rotate()
+        .jpeg({
+          quality: 85,
+        })
+        .toBuffer();
+    } catch {
+      throw new BadRequestException('Invalid image file');
+    }
+
     const key = await this.storageService.uploadFile(
       process.env.AWS_BUCKET_NAME!,
-      file.buffer,
-      file.mimetype,
+      imageBuffer,
+      'image/jpeg',
     );
 
     const updatedArtist = await this.prisma.artist.update({

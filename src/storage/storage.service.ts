@@ -4,7 +4,7 @@ import {
   GetObjectCommand,
   PutObjectCommand,
 } from '@aws-sdk/client-s3';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 @Injectable()
@@ -32,7 +32,7 @@ export class StorageService {
     contentType: string,
   ) {
     const extension = contentType.split('/')[1];
-    const key = `artists/profile-images/${uuidv4()}.${extension}`;
+    const key = `artists/profile-images/${randomUUID()}.${extension}`;
 
     const command = new PutObjectCommand({
       Bucket: bucketName,
