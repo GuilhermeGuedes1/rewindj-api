@@ -4,8 +4,12 @@ dist
 .github
 .vscode
 coverage
-
 .env
+.env.*
+!.env.example
 
-Dockerfile
+*.log
+Dockerfile*
+docker-compose*.yml
+compose*.yml
 README.md

@@ -224,3 +224,29 @@ e eventos confirmados, em negociação e perdidos. Também cria um artista
 independente com clientes e eventos próprios.
 
 Todas as contas usam a senha `RewindJ@123`.
+
+---
+
+## Docker
+
+Desenvolvimento local (API com hot reload e PostgreSQL Docker persistido no
+volume `orbit-api_postgres-data`):
+
+```bash
+docker compose up -d --build
+```
+
+Para parar o ambiente local sem remover o volume do banco:
+
+```bash
+docker compose down
+```
+
+Produção usa somente a API Docker e o PostgreSQL Neon. No servidor, o arquivo
+`.env` deve conter a `DATABASE_URL` do Neon (nunca `postgres:5432`). Para
+construir e iniciar a produção:
+
+```bash
+docker compose -f compose.prod.yml build
+docker compose -f compose.prod.yml up -d
+```
