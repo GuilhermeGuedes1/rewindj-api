@@ -20,6 +20,7 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           command_timeout: 20m
           script_stop: true
+
           script: |
             set -e
 
@@ -28,17 +29,14 @@ jobs:
             echo "Pulling latest changes..."
             git pull origin main
 
-            echo "Pulling latest image..."
-            sudo docker-compose pull api
+            echo "Building production image..."
+            sudo docker compose -f compose.prod.yml build
 
-            echo "Stopping old API container..."
-            sudo docker-compose down --remove-orphans
-
-            echo "Running Prisma migrations on Neon..."
-            sudo docker-compose run --rm api yarn prisma migrate deploy
+            echo "Running Prisma migrations..."
+            sudo docker compose -f compose.prod.yml run --rm api yarn prisma migrate deploy
 
             echo "Starting API..."
-            sudo docker-compose up -d api
+            sudo docker compose -f compose.prod.yml up -d
 
             echo "Waiting for API..."
             sleep 10
@@ -50,7 +48,7 @@ jobs:
               http://localhost:3000/health
 
             echo "Container status..."
-            sudo docker-compose ps
+            sudo docker compose -f compose.prod.yml ps
 
             echo "Removing dangling images..."
             sudo docker image prune -f
