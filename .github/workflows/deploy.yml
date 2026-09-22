@@ -29,8 +29,8 @@ jobs:
             echo "Pulling latest changes..."
             git pull origin main
 
-            echo "Building production image..."
-            sudo docker-compose -f compose.prod.yml build
+            echo "Pulling production image..."
+            sudo docker-compose -f compose.prod.yml pull api
 
             echo "Running Prisma migrations..."
             sudo docker-compose -f compose.prod.yml run --rm api yarn prisma migrate deploy
