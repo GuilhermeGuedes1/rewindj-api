@@ -1,7 +1,7 @@
 import { Test } from '@nestjs/testing';
 import { ArtistsController } from './artists.controller';
 import { ArtistsService } from './artists.service';
-import { AuthGuard } from 'src/auth/auth.guards';
+import { AuthGuard } from 'src/auth/guards/auth.guards';
 import { Role } from 'src/generated/prisma/enums';
 import { AccountType } from 'src/generated/prisma/enums';
 

@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { AccountType, Role } from 'src/generated/prisma/enums';
+import { Role } from 'src/generated/prisma/enums';
 
 export class MeResponseDto {
   @ApiProperty()
@@ -11,25 +11,26 @@ export class MeResponseDto {
   @ApiProperty()
   email!: string;
 
-  @ApiProperty()
-  phone!: string;
+  @ApiPropertyOptional()
+  phone?: string;
 
   @ApiProperty()
   role!: Role;
 
-  @ApiProperty()
-  organizationId!: string;
+  @ApiPropertyOptional()
+  organizationId?: string;
 
-  @ApiProperty()
-  organizationName!: string;
-
-  @ApiProperty({
-    enum: AccountType,
-  })
-  accountType!: AccountType;
+  @ApiPropertyOptional()
+  organizationName?: string;
 
   @ApiPropertyOptional()
   artistId?: string | null;
+
+  @ApiPropertyOptional()
+  profileImage?: string | null;
+
+  @ApiProperty()
+  isIndependent!: boolean;
 
   constructor(data: Partial<MeResponseDto>) {
     Object.assign(this, data);

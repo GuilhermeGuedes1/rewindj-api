@@ -3,7 +3,7 @@ import { FinancialService } from './financial.service';
 import { CurrentUserDto } from 'src/auth/dtos/user.dto';
 import { CurrentUser } from 'src/auth/decorators/user.decorator';
 import { UseGuards } from '@nestjs/common';
-import { AuthGuard } from 'src/auth/auth.guards';
+import { AuthGuard } from 'src/auth/guards/auth.guards';
 import { MonthSummaryResponseDto } from './dtos/month-summary-response-dto';
 import {
   ApiBearerAuth,

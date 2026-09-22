@@ -12,7 +12,7 @@ import { CurrentUserDto } from 'src/auth/dtos/user.dto';
 import { EventResponseDto } from './event-response.dto';
 import { EventDetailsResponseDto } from './dtos/event-detail-response.dto';
 import { UpdateEventDto } from './dtos/update-event.dto';
-import { AccountType, EventStatus, Role } from '../generated/prisma/client';
+import { EventStatus, Role } from '../generated/prisma/client';
 import { PaginationDTO } from './dtos/pagination-dto';
 import { buildEventAuthorizationWhere } from 'src/auth/event-authorization';
 
@@ -47,25 +47,28 @@ export class EventsService {
   }
 
   async createEvent(data: CreateEventDto, user: CurrentUserDto) {
-    if (user.role === Role.ARTIST && user.accountType === AccountType.AGENCY) {
+    if (user.role === Role.ARTIST && !user.isIndependent) {
       throw new ForbiddenException('Agency artists cannot create events');
     }
 
-    const eventArtistId =
-      user.role === Role.ARTIST &&
-      user.accountType === AccountType.INDEPENDENT_ARTIST
-        ? user.artistId
-        : data.artistId;
+    const isIndependent = user.role === Role.ARTIST && user.isIndependent;
+
+    const eventArtistId = isIndependent ? user.artistId : data.artistId;
 
     if (!eventArtistId) {
       throw new BadRequestException('Artist is required');
     }
 
     const artist = await this.prisma.artist.findFirst({
-      where: {
-        id: eventArtistId,
-        organizationId: user.organizationId,
-      },
+      where: isIndependent
+        ? {
+            id: eventArtistId,
+            isIndependent: true,
+          }
+        : {
+            id: eventArtistId,
+            organizationId: user.organizationId,
+          },
     });
 
     if (!artist) {
@@ -75,18 +78,25 @@ export class EventsService {
     try {
       let client;
 
+      // CLIENTE JÁ EXISTENTE
       if (data.clientId) {
         client = await this.prisma.client.findFirst({
-          where: {
-            id: data.clientId,
-            organizationId: user.organizationId,
-          },
+          where: isIndependent
+            ? {
+                id: data.clientId,
+                artistId: user.artistId,
+              }
+            : {
+                id: data.clientId,
+                organizationId: user.organizationId!,
+              },
         });
 
         if (!client) {
           throw new BadRequestException("Client doesn't exist");
         }
       } else {
+        // NOVO CLIENTE
         if (!data.clientName) {
           throw new BadRequestException('Client name is required');
         }
@@ -104,7 +114,9 @@ export class EventsService {
         client = clientWhereOr.length
           ? await this.prisma.client.findFirst({
               where: {
-                organizationId: user.organizationId,
+                ...(isIndependent
+                  ? { artistId: user.artistId }
+                  : { organizationId: user.organizationId! }),
                 OR: clientWhereOr,
               },
             })
@@ -117,7 +129,10 @@ export class EventsService {
               phone: data.clientPhone,
               email: data.clientEmail,
               companyName: data.clientCompanyName,
-              organizationId: user.organizationId,
+
+              ...(isIndependent
+                ? { artistId: user.artistId }
+                : { organizationId: user.organizationId! }),
             },
           });
         }
@@ -140,9 +155,11 @@ export class EventsService {
           paymentMethod: data.paymentMethod,
           hasContract: data.hasContract,
           notes: data.notes,
+
           artistId: eventArtistId,
           clientId: client.id,
-          organizationId: user.organizationId,
+
+          organizationId: isIndependent ? null : user.organizationId,
         },
         include: {
           client: true,
@@ -151,7 +168,6 @@ export class EventsService {
               id: true,
               name: true,
               stageName: true,
-              email: true,
             },
           },
         },
@@ -197,7 +213,6 @@ export class EventsService {
             id: true,
             name: true,
             stageName: true,
-            email: true,
           },
         },
       },
@@ -218,6 +233,10 @@ export class EventsService {
   }
 
   async getEventById(id: string, user: CurrentUserDto) {
+    if (!user.organizationId) {
+      throw new UnauthorizedException('User has no organization');
+    }
+
     const where: Prisma.EventWhereInput = {
       id,
       ...this.buildEventWhere(user),
@@ -232,7 +251,6 @@ export class EventsService {
             id: true,
             name: true,
             stageName: true,
-            email: true,
           },
         },
       },
@@ -246,11 +264,14 @@ export class EventsService {
   }
 
   async updateEvent(id: string, data: UpdateEventDto, user: CurrentUserDto) {
+    if (!user.organizationId) {
+      throw new UnauthorizedException('User has no organization');
+    }
     if (!user) {
       throw new UnauthorizedException('Authenticated user not found');
     }
 
-    if (user.role === Role.ARTIST && user.accountType === AccountType.AGENCY) {
+    if (user.role === Role.ARTIST && !user.isIndependent) {
       throw new ForbiddenException('Agency artists cannot update events');
     }
 
@@ -333,7 +354,6 @@ export class EventsService {
             id: true,
             name: true,
             stageName: true,
-            email: true,
           },
         },
       },

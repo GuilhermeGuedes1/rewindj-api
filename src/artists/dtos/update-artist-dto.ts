@@ -71,4 +71,12 @@ export class UpdateArtistDto {
   @IsOptional()
   @IsString()
   pixKey?: string | null;
+
+  @ApiPropertyOptional({
+    nullable: true,
+    description: 'S3 key of the artist profile image.',
+  })
+  @IsOptional()
+  @IsString()
+  profileImageKey?: string | null;
 }

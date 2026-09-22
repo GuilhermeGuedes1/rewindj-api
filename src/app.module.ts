@@ -11,6 +11,7 @@ import { ArtistsModule } from './artists/artists.module';
 import { HealthModuleModule } from './health-module/health-module.module';
 import { ConfigModule } from '@nestjs/config';
 import { FinancialModule } from './financial/financial.module';
+import { StorageModule } from './storage/storage.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { FinancialModule } from './financial/financial.module';
     ArtistsModule,
     HealthModuleModule,
     FinancialModule,
+    StorageModule,
   ],
   controllers: [],
   providers: [PrismaService],

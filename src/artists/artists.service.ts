@@ -2,6 +2,8 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
+  BadRequestException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CurrentUserDto } from '../auth/dtos/user.dto';
@@ -13,10 +15,15 @@ import * as bcrypt from 'bcrypt';
 import { Role } from 'src/generated/prisma/enums';
 import { randomUUID } from 'crypto';
 import { ensureCanManageOrganization } from 'src/auth/organization-authorization';
+import { StorageService } from 'src/storage/storage.service';
+import sharp from 'sharp';
 
 @Injectable()
 export class ArtistsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly storageService: StorageService,
+  ) {}
 
   async getMe(user: CurrentUserDto) {
     const artist = await this.prisma.artist.findUnique({
@@ -29,7 +36,15 @@ export class ArtistsService {
       throw new NotFoundException('Artist profile not found');
     }
 
-    return new ArtistResponseDto(artist);
+    const profileImageUrl = await this.storageService.getFile(
+      process.env.AWS_BUCKET_NAME!,
+      artist.profileImageKey,
+    );
+
+    return {
+      ...new ArtistResponseDto(artist),
+      profileImageUrl,
+    };
   }
 
   async findAll(user: CurrentUserDto) {
@@ -44,10 +59,25 @@ export class ArtistsService {
       },
     });
 
-    return artists.map((artist) => new ArtistResponseDto(artist));
+    return Promise.all(
+      artists.map(async (artist) => {
+        const profileImageUrl = await this.storageService.getFile(
+          process.env.AWS_BUCKET_NAME!,
+          artist.profileImageKey,
+        );
+
+        return {
+          ...new ArtistResponseDto(artist),
+          profileImageUrl,
+        };
+      }),
+    );
   }
 
   async getEvents(user: CurrentUserDto) {
+    if (!user.organizationId) {
+      throw new UnauthorizedException('User has no organization');
+    }
     const artist = await this.prisma.artist.findUnique({
       where: {
         userId: user.sub,
@@ -78,7 +108,6 @@ export class ArtistsService {
             id: true,
             name: true,
             stageName: true,
-            email: true,
             phone: true,
           },
         },
@@ -143,6 +172,51 @@ export class ArtistsService {
     };
   }
 
+  async updateProfileImage(file: Express.Multer.File, user: CurrentUserDto) {
+    const artist = await this.prisma.artist.findUnique({
+      where: {
+        userId: user.sub,
+      },
+    });
+
+    if (!artist) {
+      throw new NotFoundException('Artist profile not found');
+    }
+
+    let imageBuffer: Buffer;
+
+    try {
+      imageBuffer = await sharp(file.buffer)
+        .rotate()
+        .jpeg({
+          quality: 85,
+        })
+        .toBuffer();
+    } catch {
+      throw new BadRequestException('Invalid image file');
+    }
+
+    const key = await this.storageService.uploadFile(
+      process.env.AWS_BUCKET_NAME!,
+      imageBuffer,
+      'image/jpeg',
+    );
+
+    const updatedArtist = await this.prisma.artist.update({
+      where: {
+        id: artist.id,
+      },
+      data: {
+        profileImageKey: key,
+      },
+    });
+
+    return {
+      message: 'Profile image updated successfully',
+      artist: new ArtistResponseDto(updatedArtist),
+    };
+  }
+
   async registerArtist(body: RegisterArtistDto) {
     const existingUser = await this.prisma.user.findUnique({
       where: {
@@ -152,16 +226,6 @@ export class ArtistsService {
 
     if (existingUser) {
       throw new ConflictException('User already exists');
-    }
-
-    const existingArtist = await this.prisma.artist.findUnique({
-      where: {
-        email: body.email,
-      },
-    });
-
-    if (existingArtist) {
-      throw new ConflictException('Artist already exists');
     }
 
     const passwordHashed = await bcrypt.hash(body.password, 10);
@@ -178,12 +242,8 @@ export class ArtistsService {
 
       const createdUser = await tx.user.create({
         data: {
-          name: body.name,
           email: body.email,
           password: passwordHashed,
-          phone: body.phone,
-          role: Role.ARTIST,
-          organizationId: organization.id,
         },
       });
 
@@ -193,13 +253,14 @@ export class ArtistsService {
           stageName: body.stageName || body.name,
           birthDate: body.birthDate ? new Date(body.birthDate) : null,
           phone: body.phone,
-          email: body.email,
           address: body.address,
           city: body.city,
           state: body.state,
           pixKey: body.pixKey,
+          role: Role.ARTIST,
+          isIndependent: true,
           userId: createdUser.id,
-          organizationId: organization.id,
+          organizationId: null,
         },
       });
 
@@ -214,10 +275,7 @@ export class ArtistsService {
       message: 'Account created successfully',
       user: {
         id: result.user.id,
-        name: result.user.name,
         email: result.user.email,
-        role: result.user.role,
-        organizationId: result.user.organizationId,
       },
       artist: new ArtistResponseDto(result.artist),
     };
@@ -247,6 +305,7 @@ export class ArtistsService {
         city: data.city,
         state: data.state,
         pixKey: data.pixKey,
+        profileImageKey: data.profileImageKey,
       },
     });
 

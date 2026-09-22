@@ -8,7 +8,7 @@ import {
   ForbiddenException,
   Injectable,
 } from '@nestjs/common';
-import { AccountType, Role } from 'src/generated/prisma/client';
+import { Role } from 'src/generated/prisma/client';
 import { PaginationDTO } from 'src/events/dtos/pagination-dto';
 import { buildEventAuthorizationWhere } from 'src/auth/event-authorization';
 
@@ -16,7 +16,7 @@ import { buildEventAuthorizationWhere } from 'src/auth/event-authorization';
 export class ClientsService {
   constructor(private readonly prisma: PrismaService) {}
   private ensureCanManageClients(user: CurrentUserDto) {
-    if (user.role === Role.ARTIST && user.accountType === AccountType.AGENCY) {
+    if (user.role === Role.ARTIST && !user.isIndependent) {
       throw new ForbiddenException('Agency artists cannot manage clients');
     }
   }
@@ -32,13 +32,20 @@ export class ClientsService {
     const limit = 10;
     const skip = (page - 1) * limit;
 
+    const where =
+      user.role === Role.ARTIST && user.isIndependent
+        ? {
+            artistId: user.artistId,
+          }
+        : {
+            organizationId: user.organizationId,
+          };
+
     const count = await this.prisma.client.count({
-      where: {
-        organizationId: user.organizationId,
-      },
+      where,
     });
 
-    if (skip >= count) {
+    if (skip >= count && count > 0) {
       throw new BadRequestException('Page number exceeds total pages');
     }
 
@@ -47,9 +54,7 @@ export class ClientsService {
     const clients = await this.prisma.client.findMany({
       skip,
       take: limit,
-      where: {
-        organizationId: user.organizationId,
-      },
+      where,
       orderBy: {
         createdAt: 'desc',
       },
@@ -68,11 +73,19 @@ export class ClientsService {
   async getClientById(id: string, user: CurrentUserDto) {
     this.ensureCanManageClients(user);
 
+    const where =
+      user.role === Role.ARTIST && user.isIndependent
+        ? {
+            id,
+            artistId: user.artistId,
+          }
+        : {
+            id,
+            organizationId: user.organizationId!,
+          };
+
     const client = await this.prisma.client.findFirst({
-      where: {
-        id,
-        organizationId: user.organizationId,
-      },
+      where,
       include: {
         events: {
           where: buildEventAuthorizationWhere(user),

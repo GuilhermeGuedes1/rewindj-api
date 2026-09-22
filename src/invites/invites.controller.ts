@@ -1,6 +1,6 @@
 import { Controller, Post, Get, UseGuards, Body, Param } from '@nestjs/common';
 import { InvitesService } from './invites.service';
-import { AuthGuard } from '../auth/auth.guards';
+import { AuthGuard } from '../auth/guards/auth.guards';
 import { CurrentUser } from 'src/auth/decorators/user.decorator';
 import { CurrentUserDto } from '../auth/dtos/user.dto';
 import { CreateInviteDto } from './dtos/create-invite.dto';

@@ -8,17 +8,19 @@ export class ArtistResponseDto {
   })
   id: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example: 'Joao Pereira',
+    nullable: true,
     description: 'Artist full legal or registration name.',
   })
-  name: string;
+  name?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example: 'DJ Orbit',
+    nullable: true,
     description: 'Artist public stage name.',
   })
-  stageName: string;
+  stageName?: string;
 
   @ApiPropertyOptional({
     example: '1995-04-12T00:00:00.000Z',
@@ -33,13 +35,6 @@ export class ArtistResponseDto {
     description: 'Artist phone number.',
   })
   phone: string | null;
-
-  @ApiPropertyOptional({
-    example: 'dj.orbit@email.com',
-    nullable: true,
-    description: 'Artist contact email.',
-  })
-  email: string | null;
 
   @ApiPropertyOptional({
     example: 'Rua das Palmeiras, 100',
@@ -81,16 +76,21 @@ export class ArtistResponseDto {
   })
   updatedAt: Date;
 
+  @ApiPropertyOptional({
+    example: 'users/77d3f7a7-c4e8-41e4-9f71-a2de4b580a85-testeImagem.png',
+    nullable: true,
+    description: 'S3 key of the artist profile image.',
+  })
+  profileImageKey: string | null;
+
   constructor(artist: Artist) {
     this.id = artist.id;
-    this.name = artist.name;
-    this.stageName = artist.stageName;
+    this.name = artist.name ?? undefined;
+    this.stageName = artist.stageName ?? undefined;
 
     this.birthDate = artist.birthDate;
 
     this.phone = artist.phone;
-    this.email = artist.email;
-
     this.address = artist.address;
     this.city = artist.city;
     this.state = artist.state;
@@ -99,5 +99,7 @@ export class ArtistResponseDto {
 
     this.createdAt = artist.createdAt;
     this.updatedAt = artist.updatedAt;
+
+    this.profileImageKey = artist.profileImageKey;
   }
 }

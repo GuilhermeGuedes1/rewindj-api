@@ -1,0 +1,17 @@
+services:
+  api:
+    container_name: rewindj-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # Production only: runs the compiled NestJS application from Dockerfile.
+    command: yarn start:prod
+    ports:
+      - "3000:3000"
+    # On the production server, .env must contain DATABASE_URL for Neon.
+    # This Compose file intentionally has no local PostgreSQL service or volume.
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+    restart: unless-stopped

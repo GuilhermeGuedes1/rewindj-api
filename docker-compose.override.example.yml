@@ -1,6 +1,0 @@
-services:
-  api:
-    command: yarn start:dev
-    volumes:
-      - .:/app
-      - /app/node_modules
