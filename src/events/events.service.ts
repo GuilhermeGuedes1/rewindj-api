@@ -96,7 +96,6 @@ export class EventsService {
           throw new BadRequestException("Client doesn't exist");
         }
       } else {
-        // NOVO CLIENTE
         if (!data.clientName) {
           throw new BadRequestException('Client name is required');
         }
