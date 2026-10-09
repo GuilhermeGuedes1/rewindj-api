@@ -102,7 +102,13 @@ export class ArtistsController {
 
   @Post('me/profile-image')
   @UseGuards(AuthGuard)
-  @UseInterceptors(FileInterceptor('profileImage'))
+  @UseInterceptors(
+    FileInterceptor('profileImage', {
+      limits: {
+        fileSize: 5 * 1024 * 1024,
+      },
+    }),
+  )
   updateProfileImage(
     @UploadedFile(
       new ParseFilePipe({
